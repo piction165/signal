@@ -1,6 +1,8 @@
-const STORAGE_KEY = "signal.session.v2";
+const STORAGE_KEY = "signal.session.v3";
 const DEFAULT_SUPABASE_URL = "https://iwravorcdoswhssmnzue.supabase.co";
 const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable_bK_JuZ6qGdlfypAbfE0Btg_nDgBpom7";
+const EVENT_CODE = "LOL-EVENT";
+const EVENT_NAME = "LOL Signal";
 
 const topics = [
   "오늘 여기 오게 된 이유는?",
@@ -31,6 +33,7 @@ const state = {
   matches: [],
   notifications: [],
   selectedPair: null,
+  currentGame: null,
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -105,7 +108,7 @@ async function getOrCreateRoom(roomCode) {
   if (error) throw error;
   if (data) return data;
 
-  const created = await state.client.from("party_rooms").insert({ room_code: code, name: code }).select("id, room_code, name").single();
+  const created = await state.client.from("party_rooms").insert({ room_code: code, name: EVENT_NAME }).select("id, room_code, name").single();
   if (created.error) throw created.error;
   return created.data;
 }
@@ -128,7 +131,7 @@ async function createParticipant({ nickname, interests }) {
 
 async function joinRoom() {
   const nickname = $("#nicknameInput").value.trim();
-  const roomCode = $("#roomCodeInput").value.trim() || "PRIDE-165";
+  const roomCode = EVENT_CODE;
   const url = DEFAULT_SUPABASE_URL;
   const anonKey = DEFAULT_SUPABASE_ANON_KEY;
   const interests = $("#interestsInput").value.split(",").map((item) => item.trim()).filter(Boolean);
@@ -146,7 +149,7 @@ async function joinRoom() {
     $("#joinPanel").classList.add("hidden");
     await refreshAll();
     subscribeRealtime();
-    showToast("시그널 룸에 들어왔습니다.");
+    showToast("LOL 시그널을 시작했습니다.");
   } catch (error) {
     showToast(error.message || "시작 실패");
   }
@@ -235,12 +238,12 @@ async function loadMatches() {
 
 function renderSignedOut() {
   $("#joinPanel").classList.remove("hidden");
-  $("#roomLabel").textContent = $("#roomCodeInput").value || "PRIDE-165";
+  $("#eventLabel").textContent = EVENT_NAME;
   $("#onlineCount").textContent = "-";
   $("#meLabel").textContent = "닉네임 필요";
   $("#homeGreeting").textContent = "시작하려면 닉네임을 정하세요.";
-  $("#homeSubtext").textContent = "오늘 하루 사용할 이름으로 Signal을 보내고 받습니다.";
-  $("#peopleList").innerHTML = emptyCard("닉네임 필요", "입장 후 같은 방의 참가자를 볼 수 있습니다.");
+  $("#homeSubtext").textContent = "LOL 행사 안에서만 사용할 이름으로 Signal을 보내고 받습니다.";
+  $("#peopleList").innerHTML = emptyCard("닉네임 필요", "시작 후 행사 참여자를 볼 수 있습니다.");
   $("#homeReceivedSignals").innerHTML = emptyCard("받은 Signal 없음", "입장 후 받은 Signal이 표시됩니다.");
   $("#receivedSignalsList").innerHTML = emptyCard("받은 Signal 없음", "입장 후 확인할 수 있습니다.");
   $("#sentSignalsList").innerHTML = emptyCard("보낸 Signal 없음", "입장 후 확인할 수 있습니다.");
@@ -249,11 +252,11 @@ function renderSignedOut() {
 }
 
 function renderAll() {
-  $("#roomLabel").textContent = state.room.name || state.room.room_code;
+  $("#eventLabel").textContent = EVENT_NAME;
   $("#onlineCount").textContent = `${state.people.length + 1}명`;
   $("#meLabel").textContent = participantName(state.me);
-  $("#homeGreeting").textContent = `${participantName(state.me)}님의 오늘 Signal`;
-  $("#homeSubtext").textContent = "부담 없이 보내고, 닉네임으로 확인하세요.";
+  $("#homeGreeting").textContent = `${participantName(state.me)}님의 오늘 연결`;
+  $("#homeSubtext").textContent = "휴대폰은 잠깐만 열고, 실제 대화는 행사 안에서 이어가세요.";
 
   const unread = state.notifications.filter((item) => !item.is_read).length;
   $("#badge").textContent = String(unread);
@@ -271,7 +274,7 @@ function renderAll() {
 
 function renderPeople() {
   if (!state.people.length) {
-    $("#peopleList").innerHTML = emptyCard("참가자 없음", "아직 이 방에 다른 참가자가 없습니다.");
+    $("#peopleList").innerHTML = emptyCard("참가자 없음", "아직 표시할 행사 참여자가 없습니다.");
     return;
   }
 
@@ -287,7 +290,7 @@ function renderPeople() {
             <div class="tags">${tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>
             <div class="button-row">
               <button class="solid" data-signal-id="${escapeHtml(person.id)}">Signal 보내기</button>
-              <button class="ghost" data-game-id="${escapeHtml(person.id)}">같이 게임하기</button>
+              <button class="ghost" data-open-game="roulette">주제 뽑기</button>
             </div>
           </div>
         </article>
@@ -420,13 +423,108 @@ async function saveGameSession(gameType, resultData) {
 function choosePair() {
   const visible = state.people.filter((person) => !person.is_hidden);
   state.selectedPair = pick(visible);
-  if (!state.selectedPair) {
-    $("#pairName").textContent = "추천 없음";
-    $("#pairLine").textContent = "현재 추천할 참가자가 없습니다.";
+  return state.selectedPair;
+}
+
+function openModal(type) {
+  state.currentGame = type;
+  const modal = $("#gameModal");
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden", "false");
+  renderModal(type);
+}
+
+function closeModal() {
+  const modal = $("#gameModal");
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+function renderModal(type) {
+  const title = $("#modalTitle");
+  const kicker = $("#modalKicker");
+  const content = $("#modalContent");
+
+  if (type === "roulette") {
+    kicker.textContent = "TOPIC ROULETTE";
+    title.textContent = "지금 꺼낼 대화 주제";
+    content.innerHTML = `
+      <div class="modal-result" id="rouletteTopic">버튼을 누르면 주제가 나옵니다.</div>
+      <div class="button-row">
+        <button class="solid" id="spinRoulette">뽑기</button>
+        <button class="ghost" id="saveRoulette">저장</button>
+      </div>
+    `;
+    $("#spinRoulette").addEventListener("click", spinRoulette);
+    $("#saveRoulette").addEventListener("click", () => saveGameSession("topic_roulette", { topic: $("#rouletteTopic").textContent }));
     return;
   }
-  $("#pairName").textContent = participantName(state.selectedPair);
-  $("#pairLine").textContent = "가볍게 인사하고 오늘의 분위기를 물어보세요.";
+
+  if (type === "dice") {
+    kicker.textContent = "DICE MISSION";
+    title.textContent = "짧은 미션";
+    content.innerHTML = `
+      <div class="dice" id="diceValue">-</div>
+      <div class="modal-result" id="diceMission">주사위를 굴려 미션을 뽑으세요.</div>
+      <div class="button-row">
+        <button class="solid" id="rollDice">굴리기</button>
+        <button class="ghost" id="closeDice">닫기</button>
+      </div>
+    `;
+    $("#rollDice").addEventListener("click", rollDice);
+    $("#closeDice").addEventListener("click", closeModal);
+    return;
+  }
+
+  const pair = choosePair();
+  kicker.textContent = "RANDOM SIGNAL";
+  title.textContent = "가볍게 Signal 보내기";
+  content.innerHTML = pair
+    ? `
+      <div class="pair-card">
+        <div class="avatar large">${escapeHtml(participantName(pair)[0])}</div>
+        <h3>${escapeHtml(participantName(pair))}</h3>
+        <p>${participantTags(pair).length ? escapeHtml(participantTags(pair).join(" · ")) : "오늘 행사 참여자"}</p>
+      </div>
+      <div class="button-row">
+        <button class="solid" id="signalPair">Signal 보내기</button>
+        <button class="ghost" id="nextPair">다른 사람</button>
+      </div>
+    `
+    : `
+      <div class="modal-result">아직 추천할 참여자가 없습니다.</div>
+      <button class="ghost wide" id="closePairing">닫기</button>
+    `;
+  if (pair) {
+    $("#signalPair").addEventListener("click", () => sendSignal(pair.id));
+    $("#nextPair").addEventListener("click", () => renderModal("pairing"));
+  } else {
+    $("#closePairing").addEventListener("click", closeModal);
+  }
+}
+
+function spinRoulette() {
+  const topic = $("#rouletteTopic");
+  topic.classList.add("spinning");
+  topic.textContent = "뽑는 중...";
+  setTimeout(() => {
+    topic.textContent = pick(topics);
+    topic.classList.remove("spinning");
+  }, 520);
+}
+
+function rollDice() {
+  let ticks = 0;
+  const timer = setInterval(() => {
+    const value = Math.floor(Math.random() * 6) + 1;
+    $("#diceValue").textContent = value;
+    $("#diceMission").textContent = missions[value - 1];
+    ticks += 1;
+    if (ticks > 10) {
+      clearInterval(timer);
+      saveGameSession("dice_mission", { dice: Number($("#diceValue").textContent), mission: $("#diceMission").textContent });
+    }
+  }, 75);
 }
 
 function subscribeRealtime() {
@@ -455,34 +553,10 @@ function bindEvents() {
     location.reload();
   });
 
-  $("#spinRoulette").addEventListener("click", () => {
-    const topic = $("#rouletteTopic");
-    topic.classList.add("spinning");
-    topic.textContent = "돌아가는 중...";
-    setTimeout(() => {
-      topic.textContent = pick(topics);
-      topic.classList.remove("spinning");
-    }, 780);
+  $("#closeModal").addEventListener("click", closeModal);
+  $("#gameModal").addEventListener("click", (event) => {
+    if (event.target.id === "gameModal") closeModal();
   });
-
-  $("#saveRoulette").addEventListener("click", () => saveGameSession("topic_roulette", { topic: $("#rouletteTopic").textContent }));
-
-  $("#rollDice").addEventListener("click", () => {
-    let ticks = 0;
-    const timer = setInterval(() => {
-      const value = Math.floor(Math.random() * 6) + 1;
-      $("#diceValue").textContent = value;
-      $("#diceMission").textContent = missions[value - 1];
-      ticks += 1;
-      if (ticks > 10) {
-        clearInterval(timer);
-        saveGameSession("dice_mission", { dice: Number($("#diceValue").textContent), mission: $("#diceMission").textContent });
-      }
-    }, 75);
-  });
-
-  $("#nextPair").addEventListener("click", choosePair);
-  $("#signalPair").addEventListener("click", () => state.selectedPair && sendSignal(state.selectedPair.id));
 
   $("#markAllRead").addEventListener("click", async () => {
     if (!state.client || !state.me) return;
@@ -493,13 +567,10 @@ function bindEvents() {
 
   document.addEventListener("click", async (event) => {
     const signalId = event.target.dataset.signalId;
-    const gameId = event.target.dataset.gameId;
+    const openGame = event.target.dataset.openGame;
     const readId = event.target.dataset.readId;
     if (signalId) await sendSignal(signalId);
-    if (gameId) {
-      await saveGameSession("game_invite", { receiver_id: gameId });
-      showToast("게임 초대를 기록했습니다.");
-    }
+    if (openGame) openModal(openGame);
     if (readId) {
       const { error } = await state.client.from("notifications").update({ is_read: true }).eq("id", readId);
       showToast(error ? error.message : "읽음 처리했습니다.");
@@ -511,7 +582,7 @@ function bindEvents() {
 bindEvents();
 const session = loadSession();
 if (session) {
-  $("#roomCodeInput").value = session.roomCode || "PRIDE-165";
+  session.roomCode = EVENT_CODE;
   restoreSession(session);
 } else {
   renderSignedOut();

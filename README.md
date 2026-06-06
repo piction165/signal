@@ -4,9 +4,11 @@
 
 - Black and white mobile UI
 - Nickname-first start screen
+- LOL event-only QR entry flow with no visible room code
 - Home / Play / Signals / Matches / Me bottom navigation
 - Home hierarchy for received signals, sent signals, matches, and notifications
 - Received signals reveal the sender's daily nickname
+- Mini-games open as short modal interactions instead of full-page game screens
 - Real `participants`, `signals`, `matches`, `notifications`, and `game_sessions` reads/writes
 - Realtime subscription for notifications, participants, and matches
 - Supabase migration in `supabase/migrations/202606061438_signal_schema.sql`
@@ -15,10 +17,10 @@
 
 1. Create a Supabase project.
 2. Run `supabase/migrations/202606061438_signal_schema.sql` in the Supabase SQL editor.
-3. Insert a `party_rooms` row with a `room_code`.
-4. Insert one or more `participants` rows for that room.
+3. The app creates/uses the internal event key `LOL-EVENT`.
+4. Insert one or more `participants` rows for that event if you want preloaded test users.
 5. Open the GitHub Pages app.
-6. Enter a room code and today's nickname.
+6. Enter today's nickname.
 
 The app stores the current participant session only in browser `localStorage`.
 

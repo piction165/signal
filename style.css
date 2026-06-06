@@ -108,7 +108,7 @@ h3 {
 }
 
 .join-panel,
-.room-strip,
+.event-strip,
 .hero-card,
 .metric-card,
 .section-block,
@@ -178,7 +178,7 @@ input:focus {
   line-height: 1.45;
 }
 
-.room-strip {
+.event-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
@@ -186,7 +186,7 @@ input:focus {
   padding: 13px;
 }
 
-.room-strip strong {
+.event-strip strong {
   display: block;
   margin-top: 4px;
   font-size: 14px;
@@ -391,7 +391,8 @@ input:focus {
 }
 
 .game-card h3 {
-  margin-top: 8px;
+  min-height: 48px;
+  margin: 8px 0 14px;
 }
 
 .game-card p:not(.muted) {
@@ -486,6 +487,84 @@ input:focus {
 
 .toast.show {
   display: block;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 18px 12px calc(18px + env(safe-area-inset-bottom));
+  background: rgba(0, 0, 0, 0.42);
+}
+
+.modal-backdrop.show {
+  display: flex;
+}
+
+.modal-sheet {
+  position: relative;
+  width: min(100%, 448px);
+  max-height: min(80vh, 620px);
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 20px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: var(--soft);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.modal-sheet h2 {
+  max-width: 72%;
+  margin-top: 7px;
+}
+
+.modal-content {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.modal-result {
+  display: grid;
+  min-height: 132px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+  padding: 20px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.pair-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+  padding: 18px;
+  text-align: center;
+}
+
+.pair-card p {
+  margin-top: 8px;
+  color: var(--muted);
 }
 
 .spinning {
