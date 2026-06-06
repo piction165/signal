@@ -34,22 +34,102 @@ const rouletteQuestions = [
 ];
 
 const balanceSeeds = [
-  { name: "장원영", group: "IVE", accent: "#111111" },
-  { name: "안유진", group: "IVE", accent: "#2b2b2b" },
-  { name: "리즈", group: "IVE", accent: "#444444" },
-  { name: "카리나", group: "aespa", accent: "#111111" },
-  { name: "윈터", group: "aespa", accent: "#343434" },
-  { name: "닝닝", group: "aespa", accent: "#555555" },
-  { name: "제니", group: "BLACKPINK", accent: "#111111" },
-  { name: "로제", group: "BLACKPINK", accent: "#2f2f2f" },
-  { name: "리사", group: "BLACKPINK", accent: "#4d4d4d" },
-  { name: "김채원", group: "LE SSERAFIM", accent: "#111111" },
-  { name: "사쿠라", group: "LE SSERAFIM", accent: "#303030" },
-  { name: "허윤진", group: "LE SSERAFIM", accent: "#505050" },
-  { name: "원희", group: "ILLIT", accent: "#111111" },
-  { name: "민주", group: "ILLIT", accent: "#353535" },
-  { name: "설윤", group: "NMIXX", accent: "#111111" },
-  { name: "마스다 아야노", group: "CUTIE STREET", accent: "#1f4f8f" },
+  {
+    name: "장원영",
+    group: "IVE",
+    image: "./assets/idols/wonyoung.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "안유진",
+    group: "IVE",
+    image: "./assets/idols/yujin.jpg",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "리즈",
+    group: "IVE",
+    image: "./assets/idols/liz.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "카리나",
+    group: "aespa",
+    image: "./assets/idols/karina.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "윈터",
+    group: "aespa",
+    image: "./assets/idols/winter.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "닝닝",
+    group: "aespa",
+    image: "./assets/idols/ningning.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "제니",
+    group: "BLACKPINK",
+    image: "./assets/idols/jennie.jpg",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "로제",
+    group: "BLACKPINK",
+    image: "./assets/idols/rose.jpg",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "리사",
+    group: "BLACKPINK",
+    image: "./assets/idols/lisa.jpg",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "김채원",
+    group: "LE SSERAFIM",
+    image: "./assets/idols/chaewon.jpg",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "사쿠라",
+    group: "LE SSERAFIM",
+    image: "./assets/idols/sakura.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "허윤진",
+    group: "LE SSERAFIM",
+    image: "./assets/idols/yunjin.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "원희",
+    group: "ILLIT",
+    image: "./assets/idols/illit.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "민주",
+    group: "ILLIT",
+    image: "./assets/idols/illit.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "설윤",
+    group: "NMIXX",
+    image: "./assets/idols/nmixx.png",
+    source: "Wikimedia Commons",
+  },
+  {
+    name: "마스다 아야노",
+    group: "CUTIE STREET",
+    image: "./assets/idols/ayano.webp",
+    source: "KpopVisage",
+  },
 ];
 
 let mode = "roulette";
@@ -80,23 +160,6 @@ function drawFromBag(name, list) {
 
 function svgData(markup) {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
-}
-
-function idolImage(person) {
-  const initials = person.name.replace(/\s+/g, "").slice(0, 2);
-  return svgData(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480">
-      <rect width="360" height="480" fill="#f7f7f4"/>
-      <rect x="18" y="18" width="324" height="444" rx="20" fill="white" stroke="#111" stroke-width="3"/>
-      <circle cx="180" cy="158" r="72" fill="${person.accent}"/>
-      <path d="M84 386c12-82 76-126 96-126s84 44 96 126" fill="${person.accent}"/>
-      <circle cx="156" cy="150" r="8" fill="white"/>
-      <circle cx="204" cy="150" r="8" fill="white"/>
-      <path d="M150 194c20 18 40 18 60 0" fill="none" stroke="white" stroke-width="8" stroke-linecap="round"/>
-      <text x="180" y="84" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#111">${person.group}</text>
-      <text x="180" y="438" text-anchor="middle" font-family="Arial, sans-serif" font-size="46" font-weight="900" fill="#111">${initials}</text>
-    </svg>
-  `);
 }
 
 function tarotImage(card, variant = "front", index = 1) {
@@ -252,7 +315,7 @@ function renderBalanceMatch() {
       "BALANCE WINNER",
       winner.name,
       winner.group,
-      `<div class="winner-image"><img src="${idolImage(winner)}" alt="${winner.name} 이미지 카드" /></div>`
+      `<div class="winner-image">${imageCard(winner)}</div>`
     );
     return;
   }
@@ -275,17 +338,26 @@ function renderBalanceMatch() {
     "",
     `
       <button class="choice choice-card" data-choice-index="0">
-        <img src="${idolImage(left)}" alt="${left.name} 이미지 카드" />
+        ${imageCard(left)}
         <span>${left.group}</span>
         <strong>${left.name}</strong>
       </button>
       <button class="choice choice-card" data-choice-index="1">
-        <img src="${idolImage(right)}" alt="${right.name} 이미지 카드" />
+        ${imageCard(right)}
         <span>${right.group}</span>
         <strong>${right.name}</strong>
       </button>
     `
   );
+}
+
+function imageCard(person) {
+  return `
+    <figure class="idol-photo">
+      <img src="${person.image}" alt="${person.name} 실제 사진" loading="lazy" decoding="async" />
+      <figcaption>${person.source}</figcaption>
+    </figure>
+  `;
 }
 
 function chooseBalance(choiceIndex) {

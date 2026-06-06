@@ -209,8 +209,7 @@ p {
 
 .tarot-back img,
 .tarot-face img,
-.choice-card img,
-.winner-image img {
+.idol-photo img {
   display: block;
   width: 100%;
   height: 100%;
@@ -269,11 +268,40 @@ p {
   text-align: left;
 }
 
-.choice-card img {
+.idol-photo {
+  position: relative;
   min-height: 0;
+  margin: 0;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--soft);
+  aspect-ratio: 3 / 4;
+}
+
+.idol-photo figcaption {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  max-width: calc(100% - 12px);
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.56);
+  color: white;
+  padding: 4px 7px;
+  font-size: 9px;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.idol-photo img {
+  background: var(--soft);
+}
+
+.idol-photo img[src*="illit"],
+.idol-photo img[src*="nmixx"] {
+  object-position: center top;
 }
 
 .choice-card span {
@@ -298,10 +326,10 @@ p {
 
 .winner-image img {
   width: min(230px, 48vw);
-  aspect-ratio: 3 / 4;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--soft);
+}
+
+.winner-image .idol-photo {
+  width: min(230px, 48vw);
 }
 
 .share-box {
