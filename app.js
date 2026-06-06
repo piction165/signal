@@ -32,22 +32,22 @@ const rouletteQuestions = [
 ];
 
 const balanceSeeds = [
-  "매일 연락하는 사람",
-  "만나면 계속 웃기는 사람",
-  "취향이 완전히 같은 사람",
-  "내 얘기를 잘 기억하는 사람",
-  "눈치 빠른 사람",
-  "표현을 아끼지 않는 사람",
-  "같이 있으면 조용해도 편한 사람",
-  "새로운 곳에 데려가주는 사람",
-  "대화가 깊은 사람",
-  "장난 코드가 맞는 사람",
-  "내 친구들과 잘 어울리는 사람",
-  "사진을 잘 찍어주는 사람",
-  "음악 취향이 좋은 사람",
-  "혼자만의 시간을 존중하는 사람",
-  "일할 때 멋있는 사람",
-  "밥 취향이 맞는 사람",
+  "장원영",
+  "카리나",
+  "안유진",
+  "윈터",
+  "제니",
+  "아이유",
+  "수지",
+  "한소희",
+  "차은우",
+  "정국",
+  "뷔",
+  "박보검",
+  "손석구",
+  "덱스",
+  "변우석",
+  "공유",
 ];
 
 let mode = "roulette";
@@ -86,6 +86,7 @@ function setStage(kicker, title, body, actionsHtml) {
   $("#stageKicker").textContent = kicker;
   $("#stageTitle").textContent = title;
   $("#stageBody").textContent = body || "";
+  $("#stageBody").hidden = !body;
   $("#stageActions").innerHTML = actionsHtml;
 }
 
@@ -95,7 +96,7 @@ function renderTarot() {
   setStage(
     "LOVE TAROT",
     "오늘의 카드 3장",
-    "끌리는 카드를 하나 고르면 오늘의 연애운을 봐드립니다.",
+    "",
     tarotChoices
       .map(
         (_, index) => `
@@ -139,7 +140,7 @@ function renderFlirt() {
   setStage(
     "FLIRTING LINE",
     currentText,
-    "너무 진지하게 읽지 말고, 웃으면서 던지는 용도.",
+    "",
     `<button class="primary" id="drawButton">다른 멘트</button><button id="copyButton">복사</button>`
   );
 }
@@ -149,7 +150,7 @@ function renderRoulette() {
   setStage(
     "QUESTION ROULETTE",
     currentText,
-    "엉뚱해도 괜찮습니다. 바로 반응이 나오면 성공.",
+    "",
     `<button class="primary" id="drawButton">다른 질문</button><button id="copyButton">복사</button>`
   );
 }
@@ -168,7 +169,7 @@ function renderBalanceMatch() {
     setStage(
       "BALANCE WINNER",
       bracket[0],
-      "오늘의 이상형 키워드 우승.",
+      "",
       `<button class="primary" id="drawButton">다시 16강</button><button id="copyButton">복사</button>`
     );
     return;
@@ -184,11 +185,12 @@ function renderBalanceMatch() {
   const left = bracket[matchIndex];
   const right = bracket[matchIndex + 1];
   const currentRound = roundSize === 2 ? "FINAL" : `${roundSize}강`;
+  const progress = `${Math.floor(matchIndex / 2) + 1}/${Math.floor(bracket.length / 2)}`;
   currentText = `${left} vs ${right}`;
   setStage(
-    `BALANCE ${currentRound}`,
+    `BALANCE ${currentRound} ${progress}`,
     "둘 중 더 끌리는 쪽은?",
-    `${Math.floor(matchIndex / 2) + 1} / ${Math.floor(bracket.length / 2)}`,
+    "",
     `<button class="choice" data-choice="${left}">${left}</button><button class="choice" data-choice="${right}">${right}</button>`
   );
 }
