@@ -386,6 +386,19 @@ async function copyCurrent() {
   }
 }
 
+function retryCurrentMode() {
+  if (mode === "tarot") {
+    closeResultModal();
+    renderTarot();
+  }
+  if (mode === "balance") {
+    closeResultModal();
+    startBalance();
+  }
+  if (mode === "flirt") openFlirtResult();
+  if (mode === "roulette") openRouletteResult();
+}
+
 async function shareApp() {
   const url = location.href.split("?")[0];
   if (navigator.share) {
@@ -430,7 +443,7 @@ document.addEventListener("click", (event) => {
 $("#shareTop").addEventListener("click", shareApp);
 $("#shareMain").addEventListener("click", shareApp);
 $("#modalClose").addEventListener("click", closeResultModal);
-$("#modalCopy").addEventListener("click", copyCurrent);
+$("#modalRetry").addEventListener("click", retryCurrentMode);
 $("#resultModal").addEventListener("click", (event) => {
   if (event.target.id === "resultModal") closeResultModal();
 });
