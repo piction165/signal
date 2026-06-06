@@ -1,16 +1,16 @@
 :root {
   color-scheme: light;
-  --bg: #f5f8ff;
-  --surface: rgba(255, 255, 255, 0.86);
+  --bg: #f6f6f6;
+  --surface: rgba(255, 255, 255, 0.92);
   --surface-strong: #ffffff;
-  --text: #101828;
-  --muted: #667085;
-  --line: rgba(16, 24, 40, 0.09);
-  --blue: #007aff;
-  --blue-2: #0a84ff;
-  --blue-soft: #e8f2ff;
-  --green: #34c759;
-  --shadow: 0 18px 50px rgba(38, 80, 140, 0.14);
+  --text: #111111;
+  --muted: #6f6f6f;
+  --line: rgba(0, 0, 0, 0.1);
+  --ink: #111111;
+  --ink-2: #2a2a2a;
+  --soft: #efefef;
+  --good: #111111;
+  --shadow: 0 18px 44px rgba(0, 0, 0, 0.08);
   font-family: Inter, Pretendard, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
 }
 
@@ -21,7 +21,7 @@
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top, rgba(0, 122, 255, 0.16), transparent 30rem),
+    radial-gradient(circle at top, rgba(0, 0, 0, 0.06), transparent 30rem),
     var(--bg);
   color: var(--text);
 }
@@ -101,7 +101,7 @@ h3 {
   height: 21px;
   place-items: center;
   border-radius: 999px;
-  background: var(--blue);
+  background: var(--ink);
   color: white;
   font-size: 11px;
   font-weight: 900;
@@ -157,8 +157,8 @@ input {
 }
 
 input:focus {
-  border-color: rgba(0, 122, 255, 0.45);
-  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+  border-color: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.07);
 }
 
 .advanced {
@@ -167,7 +167,7 @@ input:focus {
 }
 
 .advanced summary {
-  color: var(--blue);
+  color: var(--ink);
   font-size: 13px;
   font-weight: 800;
 }
@@ -204,8 +204,8 @@ input:focus {
 .hero-card {
   padding: 20px;
   background:
-    linear-gradient(145deg, rgba(0, 122, 255, 0.98), rgba(64, 156, 255, 0.92)),
-    var(--blue);
+    linear-gradient(145deg, rgba(17, 17, 17, 0.98), rgba(62, 62, 62, 0.94)),
+    var(--ink);
   color: white;
 }
 
@@ -242,7 +242,7 @@ input:focus {
 .metric-card strong {
   display: block;
   margin-top: 8px;
-  color: var(--blue);
+  color: var(--ink);
   font-size: 32px;
   line-height: 1;
 }
@@ -311,8 +311,8 @@ input:focus {
   height: 48px;
   place-items: center;
   border-radius: 8px;
-  background: var(--blue-soft);
-  color: var(--blue);
+  background: var(--soft);
+  color: var(--ink);
   font-weight: 900;
 }
 
@@ -337,8 +337,8 @@ input:focus {
   min-height: 24px;
   padding: 0 9px;
   border-radius: 999px;
-  background: var(--blue-soft);
-  color: var(--blue);
+  background: var(--soft);
+  color: var(--ink);
   font-size: 12px;
   font-weight: 800;
 }
@@ -358,7 +358,7 @@ input:focus {
 }
 
 .solid {
-  background: var(--blue);
+  background: var(--ink);
   color: white;
 }
 
@@ -378,7 +378,7 @@ input:focus {
 .text-button {
   min-height: auto;
   background: transparent;
-  color: var(--blue);
+  color: var(--ink);
   font-size: 13px;
 }
 
@@ -407,8 +407,8 @@ input:focus {
   margin: 12px auto;
   place-items: center;
   border-radius: 8px;
-  background: var(--blue-soft);
-  color: var(--blue);
+  background: var(--soft);
+  color: var(--ink);
   font-size: 38px;
   font-weight: 900;
 }
@@ -435,7 +435,7 @@ input:focus {
 }
 
 .notice.unread {
-  border-color: rgba(0, 122, 255, 0.38);
+  border-color: rgba(0, 0, 0, 0.22);
   background: #f7fbff;
 }
 
@@ -464,8 +464,8 @@ input:focus {
 }
 
 .nav-item.active {
-  background: var(--blue-soft);
-  color: var(--blue);
+  background: var(--soft);
+  color: var(--ink);
 }
 
 .toast {
@@ -477,7 +477,7 @@ input:focus {
   max-width: 448px;
   margin: 0 auto;
   padding: 13px 14px;
-  border: 1px solid rgba(0, 122, 255, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.16);
   border-radius: 8px;
   background: rgba(16, 24, 40, 0.9);
   color: white;

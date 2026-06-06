@@ -1,5 +1,6 @@
 const STORAGE_KEY = "signal.session.v2";
 const DEFAULT_SUPABASE_URL = "https://iwravorcdoswhssmnzue.supabase.co";
+const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable_bK_JuZ6qGdlfypAbfE0Btg_nDgBpom7";
 
 const topics = [
   "오늘 여기 오게 된 이유는?",
@@ -94,7 +95,7 @@ function signalName(signal, key) {
 }
 
 function createClient(url, anonKey) {
-  if (!url || !anonKey) throw new Error("Supabase URL과 anon key가 필요합니다.");
+  if (!url || !anonKey) throw new Error("앱 연결 정보가 없습니다.");
   return window.supabase.createClient(url, anonKey);
 }
 
@@ -128,8 +129,8 @@ async function createParticipant({ nickname, interests }) {
 async function joinRoom() {
   const nickname = $("#nicknameInput").value.trim();
   const roomCode = $("#roomCodeInput").value.trim() || "PRIDE-165";
-  const url = $("#supabaseUrl").value.trim() || DEFAULT_SUPABASE_URL;
-  const anonKey = $("#supabaseAnonKey").value.trim();
+  const url = DEFAULT_SUPABASE_URL;
+  const anonKey = DEFAULT_SUPABASE_ANON_KEY;
   const interests = $("#interestsInput").value.split(",").map((item) => item.trim()).filter(Boolean);
 
   if (!nickname) {
@@ -238,7 +239,7 @@ function renderSignedOut() {
   $("#onlineCount").textContent = "-";
   $("#meLabel").textContent = "닉네임 필요";
   $("#homeGreeting").textContent = "시작하려면 닉네임을 정하세요.";
-  $("#homeSubtext").textContent = "Supabase anon key 입력 후 실제 데이터를 사용할 수 있습니다.";
+  $("#homeSubtext").textContent = "오늘 하루 사용할 이름으로 Signal을 보내고 받습니다.";
   $("#peopleList").innerHTML = emptyCard("닉네임 필요", "입장 후 같은 방의 참가자를 볼 수 있습니다.");
   $("#homeReceivedSignals").innerHTML = emptyCard("받은 Signal 없음", "입장 후 받은 Signal이 표시됩니다.");
   $("#receivedSignalsList").innerHTML = emptyCard("받은 Signal 없음", "입장 후 확인할 수 있습니다.");
@@ -508,11 +509,8 @@ function bindEvents() {
 }
 
 bindEvents();
-$("#supabaseUrl").value = DEFAULT_SUPABASE_URL;
 const session = loadSession();
 if (session) {
-  $("#supabaseUrl").value = session.url || DEFAULT_SUPABASE_URL;
-  $("#supabaseAnonKey").value = session.anonKey || "";
   $("#roomCodeInput").value = session.roomCode || "PRIDE-165";
   restoreSession(session);
 } else {

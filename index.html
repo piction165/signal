@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f5f8ff" />
+    <meta name="theme-color" content="#ffffff" />
     <title>시그널</title>
     <link rel="stylesheet" href="./style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -36,17 +36,6 @@
           Room code
           <input id="roomCodeInput" value="PRIDE-165" autocomplete="off" />
         </label>
-        <details class="advanced">
-          <summary>Supabase 설정</summary>
-          <label>
-            Supabase URL
-            <input id="supabaseUrl" value="https://iwravorcdoswhssmnzue.supabase.co" autocomplete="off" />
-          </label>
-          <label>
-            Supabase anon key
-            <input id="supabaseAnonKey" placeholder="Supabase anon key를 입력하세요" autocomplete="off" />
-          </label>
-        </details>
         <button class="solid wide" id="joinRoom">시작하기</button>
         <p class="hint">닉네임은 오늘 이 방에서만 쓰는 이름입니다. 받은 Signal에는 이 닉네임이 표시됩니다.</p>
       </section>
