@@ -81,7 +81,7 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 18px;
+  padding: 14px;
 }
 
 .hero h1 {
@@ -433,12 +433,12 @@ p {
   }
 
   .hero {
-    min-height: 210px;
+    min-height: 118px;
   }
 
   .hero h1 {
     max-width: 12ch;
-    font-size: 48px;
+    font-size: 36px;
   }
 
   .stage {
