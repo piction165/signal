@@ -237,8 +237,8 @@ p {
 }
 
 .tarot-face {
-  width: min(230px, 44vw);
-  min-height: 320px;
+  width: min(210px, 42vw);
+  min-height: 292px;
   padding: 0;
   color: white;
   background: var(--ink);
@@ -261,7 +261,7 @@ p {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto auto;
   gap: 8px;
-  min-height: 270px;
+  min-height: 238px;
   overflow: hidden;
   padding: 10px;
   text-align: left;
@@ -275,7 +275,7 @@ p {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--soft);
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
 }
 
 .idol-photo img {
@@ -380,6 +380,17 @@ p {
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
 }
 
+.modal-panel .tarot-result {
+  margin-top: 2px;
+}
+
+.modal-panel .tarot-face {
+  width: min(210px, 46vw);
+  min-height: 0;
+  aspect-ratio: 2 / 3;
+  max-height: 40vh;
+}
+
 .modal-panel h2 {
   font-size: clamp(34px, 7vw, 70px);
   line-height: 1.02;
@@ -454,11 +465,11 @@ p {
   }
 
   .stage {
-    min-height: 330px;
+    min-height: 300px;
   }
 
   .stage h2 {
-    font-size: 38px;
+    font-size: 34px;
   }
 
   .actions:has(.tarot-card) {
@@ -475,8 +486,10 @@ p {
   }
 
   .tarot-face {
-    width: min(230px, 58vw);
-    min-height: 320px;
+    width: min(190px, 48vw);
+    min-height: 0;
+    aspect-ratio: 2 / 3;
+    max-height: 36vh;
   }
 
   .share-box {
@@ -530,12 +543,12 @@ p {
   }
 
   .stage {
-    min-height: 260px;
-    padding: 18px;
+    min-height: 232px;
+    padding: 14px;
   }
 
   .stage h2 {
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .actions:has(.tarot-card) {
@@ -549,6 +562,51 @@ p {
 
   .tarot-back {
     min-height: 126px;
+  }
+
+  .choice-card {
+    min-height: 202px;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .idol-photo {
+    aspect-ratio: 1 / 1;
+  }
+
+  .choice-card span {
+    font-size: 10px;
+  }
+
+  .choice-card strong {
+    font-size: 26px;
+  }
+
+  .modal {
+    align-items: start;
+    padding: 10px;
+    padding-top: 14px;
+  }
+
+  .modal-panel {
+    width: min(430px, 94vw);
+    max-height: 82vh;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .modal-panel h2 {
+    font-size: 32px;
+  }
+
+  .modal-panel p:not(.kicker) {
+    font-size: 16px;
+    line-height: 1.36;
+  }
+
+  .modal-panel .tarot-face {
+    width: min(150px, 38vw);
+    max-height: 30vh;
   }
 
   .share-box {

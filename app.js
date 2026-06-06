@@ -34,82 +34,98 @@ const balanceSeeds = [
   {
     name: "장원영",
     group: "IVE",
-    image: "./assets/profiles/wonyoung.webp",
+    image: "./assets/profile-cards/wonyoung.jpg",
+    focus: "50% 20%",
   },
   {
     name: "안유진",
     group: "IVE",
-    image: "./assets/profiles/yujin.webp",
+    image: "./assets/profile-cards/yujin.jpg",
+    focus: "50% 22%",
   },
   {
     name: "리즈",
     group: "IVE",
-    image: "./assets/profiles/liz.webp",
+    image: "./assets/profile-cards/liz.jpg",
+    focus: "50% 20%",
   },
   {
     name: "카리나",
     group: "aespa",
-    image: "./assets/profiles/karina.webp",
+    image: "./assets/profile-cards/karina.jpg",
+    focus: "50% 18%",
   },
   {
     name: "윈터",
     group: "aespa",
-    image: "./assets/profiles/winter.webp",
+    image: "./assets/profile-cards/winter.jpg",
+    focus: "50% 18%",
   },
   {
     name: "닝닝",
     group: "aespa",
-    image: "./assets/profiles/ningning.webp",
+    image: "./assets/profile-cards/ningning.jpg",
+    focus: "50% 20%",
   },
   {
     name: "제니",
     group: "BLACKPINK",
-    image: "./assets/profiles/jennie.webp",
+    image: "./assets/profile-cards/jennie.jpg",
+    focus: "50% 18%",
   },
   {
     name: "로제",
     group: "BLACKPINK",
-    image: "./assets/profiles/rose.webp",
+    image: "./assets/profile-cards/rose.jpg",
+    focus: "50% 22%",
   },
   {
     name: "리사",
     group: "BLACKPINK",
-    image: "./assets/profiles/lisa.webp",
+    image: "./assets/profile-cards/lisa.jpg",
+    focus: "50% 18%",
   },
   {
     name: "김채원",
     group: "LE SSERAFIM",
-    image: "./assets/profiles/chaewon.webp",
+    image: "./assets/profile-cards/chaewon.jpg",
+    focus: "50% 22%",
   },
   {
     name: "사쿠라",
     group: "LE SSERAFIM",
-    image: "./assets/profiles/sakura.webp",
+    image: "./assets/profile-cards/sakura.jpg",
+    focus: "50% 22%",
   },
   {
     name: "허윤진",
     group: "LE SSERAFIM",
-    image: "./assets/profiles/yunjin.webp",
+    image: "./assets/profile-cards/yunjin.jpg",
+    focus: "50% 22%",
   },
   {
     name: "원희",
     group: "ILLIT",
-    image: "./assets/profiles/wonhee.webp",
+    image: "./assets/profile-cards/wonhee.jpg",
+    focus: "50% 18%",
   },
   {
     name: "민주",
     group: "ILLIT",
-    image: "./assets/profiles/minju.webp",
+    image: "./assets/profile-cards/minju.jpg",
+    focus: "50% 20%",
   },
   {
     name: "설윤",
     group: "NMIXX",
-    image: "./assets/profiles/sullyoon.webp",
+    image: "./assets/profile-cards/sullyoon.jpg",
+    focus: "50% 22%",
   },
   {
     name: "마스다 아야노",
     group: "CUTIE STREET",
-    image: "./assets/profiles/ayano.webp",
+    image: "./assets/profile-cards/ayano.jpg",
+    focus: "50% 18%",
   },
 ];
 
@@ -332,7 +348,7 @@ function renderBalanceMatch() {
 function imageCard(person) {
   return `
     <figure class="idol-photo">
-      <img src="${person.image}" alt="${person.name} 실제 사진" loading="lazy" decoding="async" />
+      <img src="${person.image}" alt="${person.name} 프로필 사진" loading="lazy" decoding="async" style="object-position: ${person.focus || "50% 22%"};" />
     </figure>
   `;
 }
