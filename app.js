@@ -9,6 +9,8 @@ const tarotCards = [
   { name: "TEMPERANCE", symbol: "XIV", reading: "밀고 당기기보다 리듬이 중요합니다. 질문 하나, 리액션 하나면 충분합니다." },
 ];
 
+const AI_ENDPOINT = "https://iwravorcdoswhssmnzue.supabase.co/functions/v1/signal-ai";
+
 const flirtLines = [
   "오늘 여기 조명보다 방금 웃은 게 더 기억에 남는데요.",
   "이 질문 좀 이상한데, 오늘 본 사람 중에 제일 말 걸기 쉬워 보였어요.",
@@ -90,6 +92,33 @@ function setStage(kicker, title, body, actionsHtml) {
   $("#stageActions").innerHTML = actionsHtml;
 }
 
+function openResultModal(kicker, title, body, extraHtml = "") {
+  $("#modalKicker").textContent = kicker;
+  $("#modalTitle").textContent = title;
+  $("#modalBody").textContent = body || "";
+  $("#modalExtra").innerHTML = extraHtml;
+  $("#resultModal").hidden = false;
+}
+
+function closeResultModal() {
+  $("#resultModal").hidden = true;
+}
+
+async function generateAiText(kind, fallbackText) {
+  try {
+    const response = await fetch(AI_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ kind, fallback: fallbackText }),
+    });
+    if (!response.ok) throw new Error("AI unavailable");
+    const data = await response.json();
+    return data.text || fallbackText;
+  } catch {
+    return fallbackText;
+  }
+}
+
 function renderTarot() {
   tarotChoices = [drawFromBag("tarot", tarotCards), drawFromBag("tarot", tarotCards), drawFromBag("tarot", tarotCards)];
   currentText = "오늘의 타로 카드 3장 중 한 장을 고르세요.";
@@ -117,7 +146,7 @@ function chooseTarot(index) {
   const card = tarotChoices[index];
   if (!card) return;
   currentText = `${card.name}: ${card.reading}`;
-  setStage(
+  openResultModal(
     "TODAY'S TAROT",
     card.name,
     card.reading,
@@ -129,30 +158,40 @@ function chooseTarot(index) {
           <span>LOVE</span>
         </div>
       </div>
-      <button class="primary" id="drawButton">다시 3장 뽑기</button>
-      <button id="copyButton">복사</button>
     `
   );
 }
 
 function renderFlirt() {
-  currentText = drawFromBag("flirt", flirtLines);
   setStage(
     "FLIRTING LINE",
-    currentText,
+    "플러팅 멘트",
     "",
-    `<button class="primary" id="drawButton">다른 멘트</button><button id="copyButton">복사</button>`
+    `<button class="primary" id="drawButton">뽑기</button>`
   );
 }
 
 function renderRoulette() {
-  currentText = drawFromBag("roulette", rouletteQuestions);
   setStage(
     "QUESTION ROULETTE",
-    currentText,
+    "질문 룰렛",
     "",
-    `<button class="primary" id="drawButton">다른 질문</button><button id="copyButton">복사</button>`
+    `<button class="primary" id="drawButton">뽑기</button>`
   );
+}
+
+async function openFlirtResult() {
+  const fallback = drawFromBag("flirt", flirtLines);
+  openResultModal("FLIRTING LINE", "생성 중...", "");
+  currentText = await generateAiText("flirt", fallback);
+  openResultModal("FLIRTING LINE", currentText, "");
+}
+
+async function openRouletteResult() {
+  const fallback = drawFromBag("roulette", rouletteQuestions);
+  openResultModal("QUESTION ROULETTE", "생성 중...", "");
+  currentText = await generateAiText("roulette", fallback);
+  openResultModal("QUESTION ROULETTE", currentText, "");
 }
 
 function startBalance() {
@@ -172,6 +211,7 @@ function renderBalanceMatch() {
       "",
       `<button class="primary" id="drawButton">다시 16강</button><button id="copyButton">복사</button>`
     );
+    openResultModal("BALANCE WINNER", bracket[0], "");
     return;
   }
 
@@ -250,8 +290,8 @@ document.addEventListener("click", (event) => {
   if (event.target.id === "drawButton") {
     if (mode === "tarot") renderTarot();
     if (mode === "balance") startBalance();
-    if (mode === "flirt") renderFlirt();
-    if (mode === "roulette") renderRoulette();
+    if (mode === "flirt") openFlirtResult();
+    if (mode === "roulette") openRouletteResult();
   }
   if (event.target.id === "copyButton") copyCurrent();
   if (event.target.dataset.choice) chooseBalance(event.target.dataset.choice);
@@ -261,6 +301,11 @@ document.addEventListener("click", (event) => {
 
 $("#shareTop").addEventListener("click", shareApp);
 $("#shareMain").addEventListener("click", shareApp);
+$("#modalClose").addEventListener("click", closeResultModal);
+$("#modalCopy").addEventListener("click", copyCurrent);
+$("#resultModal").addEventListener("click", (event) => {
+  if (event.target.id === "resultModal") closeResultModal();
+});
 
 renderQr();
 setMode("roulette");

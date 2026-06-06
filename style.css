@@ -169,6 +169,10 @@ p {
   padding: 0 14px;
 }
 
+.actions button:only-child {
+  grid-column: 1 / -1;
+}
+
 .actions:has(.tarot-card) {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -285,6 +289,54 @@ p {
 
 .toast.show {
   display: block;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.48);
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+.modal-panel {
+  display: grid;
+  width: min(620px, 92vw);
+  max-height: 88vh;
+  gap: 14px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  padding: 22px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+}
+
+.modal-panel h2 {
+  font-size: clamp(34px, 7vw, 70px);
+  line-height: 1.02;
+}
+
+.modal-panel p:not(.kicker) {
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.modal-actions button {
+  min-height: 50px;
 }
 
 @media (orientation: portrait) {

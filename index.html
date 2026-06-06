@@ -57,6 +57,19 @@
       </section>
     </main>
 
+    <div class="modal" id="resultModal" hidden>
+      <section class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <p class="kicker" id="modalKicker">RESULT</p>
+        <h2 id="modalTitle">결과</h2>
+        <p id="modalBody"></p>
+        <div id="modalExtra"></div>
+        <div class="modal-actions">
+          <button class="primary" id="modalCopy">복사</button>
+          <button id="modalClose">닫기</button>
+        </div>
+      </section>
+    </div>
+
     <div class="toast" id="toast">복사했습니다.</div>
     <script src="./app.js"></script>
   </body>
