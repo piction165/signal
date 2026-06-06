@@ -81,12 +81,13 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 96px;
   padding: 14px;
 }
 
 .hero h1 {
   max-width: 7ch;
-  font-size: clamp(34px, 7vw, 68px);
+  font-size: clamp(30px, 5vw, 52px);
   line-height: 0.98;
   letter-spacing: 0;
 }
@@ -497,6 +498,78 @@ p {
   .tarot-face {
     width: min(230px, 58vw);
     min-height: 320px;
+  }
+
+  .share-box {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    max-width: 520px;
+    min-height: 100vh;
+    gap: 10px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+
+  .top {
+    min-height: 38px;
+  }
+
+  .top button {
+    min-width: 64px;
+    min-height: 34px;
+  }
+
+  .hero {
+    min-height: 74px;
+    padding: 10px 14px;
+  }
+
+  .hero h1 {
+    max-width: none;
+    font-size: 31px;
+    line-height: 1;
+  }
+
+  .grid {
+    gap: 7px;
+    padding: 7px;
+  }
+
+  .tile {
+    min-height: 96px;
+    padding: 11px;
+  }
+
+  .tile strong {
+    font-size: 22px;
+  }
+
+  .stage {
+    min-height: 260px;
+    padding: 18px;
+  }
+
+  .stage h2 {
+    font-size: 32px;
+  }
+
+  .actions:has(.tarot-card) {
+    gap: 6px;
+  }
+
+  .tarot-card {
+    min-height: 136px;
+    padding: 4px;
+  }
+
+  .tarot-back {
+    min-height: 126px;
   }
 
   .share-box {
