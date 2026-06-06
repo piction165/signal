@@ -3,35 +3,64 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#101010" />
+    <meta name="theme-color" content="#0b3bff" />
     <title>시그널</title>
     <link rel="stylesheet" href="./style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
     <main class="app-shell">
-      <section class="topbar">
+      <header class="topbar">
         <div>
-          <p class="eyebrow">Sapphic party room</p>
+          <p class="eyebrow">party signal room</p>
           <h1>시그널</h1>
         </div>
         <button class="icon-button" data-view="notifications" aria-label="알림">
-          <span class="badge" id="badge">3</span>
+          <span class="badge" id="badge">0</span>
           <span>알림</span>
         </button>
+      </header>
+
+      <section class="setup-panel" id="setupPanel">
+        <div>
+          <p class="eyebrow">Supabase 연결</p>
+          <h2>실제 데이터를 불러오려면 연결 정보를 넣어주세요.</h2>
+        </div>
+        <label>
+          Supabase URL
+          <input id="supabaseUrl" placeholder="https://xxxx.supabase.co" autocomplete="off" />
+        </label>
+        <label>
+          Supabase anon key
+          <input id="supabaseAnonKey" placeholder="eyJhbGciOi..." autocomplete="off" />
+        </label>
+        <label>
+          Room code
+          <input id="roomCodeInput" placeholder="예: PRIDE-165" autocomplete="off" />
+        </label>
+        <label>
+          내 participant id
+          <input id="participantIdInput" placeholder="participants.id uuid" autocomplete="off" />
+        </label>
+        <div class="button-row">
+          <button class="solid" id="saveConfig">연결 저장</button>
+          <button class="ghost" id="clearConfig">초기화</button>
+        </div>
+        <p class="hint">이 정보는 이 브라우저의 localStorage에만 저장됩니다. 공개 repo에는 키를 넣지 않습니다.</p>
       </section>
 
       <section class="room-card">
         <div>
           <p class="muted">Room</p>
-          <strong>PRIDE-165</strong>
+          <strong id="roomLabel">연결 필요</strong>
         </div>
         <div>
           <p class="muted">Online</p>
-          <strong>18명</strong>
+          <strong id="onlineCount">-</strong>
         </div>
         <div>
-          <p class="muted">My Signal</p>
-          <strong>익명</strong>
+          <p class="muted">Status</p>
+          <strong id="connectionState">Offline</strong>
         </div>
       </section>
 
@@ -39,8 +68,9 @@
         <div class="section-head">
           <div>
             <h2>People</h2>
-            <p>마음에 드는 사람에게 부담 없이 Signal을 보내세요.</p>
+            <p>같은 방에 들어온 실제 참가자 목록을 불러옵니다.</p>
           </div>
+          <button class="ghost small" id="refreshPeople">새로고침</button>
         </div>
         <div class="people-list" id="peopleList"></div>
       </section>
@@ -49,25 +79,24 @@
         <div class="section-head">
           <div>
             <h2>처음 만났다면, 일단 같이 놀기</h2>
-            <p>룰렛, 주사위, 사다리타기로 어색함을 깨보세요.</p>
+            <p>게임 결과는 `game_sessions`에 저장할 수 있게 구성했습니다.</p>
           </div>
         </div>
 
         <div class="game-grid">
           <article class="game-card primary">
             <p class="muted">Topic Roulette</p>
-            <h3 id="rouletteTopic">오늘 여기 오게 된 이유는?</h3>
+            <h3 id="rouletteTopic">룰렛을 돌리면 주제가 나옵니다.</h3>
             <div class="button-row">
               <button class="solid" id="spinRoulette">룰렛 돌리기</button>
-              <button class="ghost" id="aiTopic">AI로 새 주제</button>
+              <button class="ghost" id="saveRoulette">결과 저장</button>
             </div>
-            <button class="text-button">이 주제로 대화 시작</button>
           </article>
 
           <article class="game-card">
             <p class="muted">Dice Mission</p>
-            <div class="dice" id="diceValue">1</div>
-            <p id="diceMission">서로 닉네임의 뜻 말하기</p>
+            <div class="dice" id="diceValue">-</div>
+            <p id="diceMission">주사위를 굴려 가벼운 미션을 뽑으세요.</p>
             <div class="button-row">
               <button class="solid" id="rollDice">주사위 굴리기</button>
               <button class="ghost">Pass</button>
@@ -76,30 +105,27 @@
 
           <article class="game-card">
             <p class="muted">Ladder Game</p>
-            <h3 id="ladderResult">누가 먼저 질문할지 정하기</h3>
+            <h3 id="ladderResult">참가자를 불러온 뒤 실행할 수 있습니다.</h3>
             <button class="solid wide" id="runLadder">사다리타기 시작</button>
           </article>
 
           <article class="game-card">
             <p class="muted">Random Pairing</p>
-            <h3 id="pairName">Vega</h3>
-            <p id="pairLine">오늘의 vibe를 노래 제목으로 말해보자고 해보세요.</p>
+            <h3 id="pairName">아직 추천 없음</h3>
+            <p id="pairLine">실제 참가자 중 온라인/공개 상태인 사람을 추천합니다.</p>
             <div class="button-row">
-              <button class="solid">Signal 보내기</button>
+              <button class="solid" id="signalPair">Signal 보내기</button>
               <button class="ghost" id="nextPair">다른 사람</button>
             </div>
           </article>
 
           <article class="game-card">
             <p class="muted">AI Icebreaker</p>
-            <h3>대화 주제 3개 만들기</h3>
-            <div class="segmented">
-              <button class="selected">혼자</button>
-              <button>둘이</button>
-              <button>여러 명</button>
-            </div>
-            <ul id="icebreakers"></ul>
-            <button class="solid wide" id="makeIcebreaker">AI 주제 만들기</button>
+            <h3>대화 주제 3개</h3>
+            <ul id="icebreakers">
+              <li>OpenAI 서버 엔드포인트 연결 후 실제 생성 결과를 표시합니다.</li>
+            </ul>
+            <button class="solid wide" id="makeIcebreaker">AI 주제 요청 기록</button>
           </article>
         </div>
       </section>
@@ -108,13 +134,13 @@
         <div class="section-head">
           <div>
             <h2>Signals</h2>
-            <p>받은 Signal은 서로 보냈을 때만 공개됩니다.</p>
+            <p>받은 Signal은 실제 `signals` 테이블 기준으로 집계합니다.</p>
           </div>
         </div>
         <div class="stat-card">
           <span>받은 Signal</span>
-          <strong>3</strong>
-          <p>누군가 당신에게 Signal을 보냈어요.</p>
+          <strong id="receivedSignalCount">-</strong>
+          <p id="signalHelp">Supabase 연결 후 확인할 수 있습니다.</p>
         </div>
       </section>
 
@@ -122,28 +148,23 @@
         <div class="section-head">
           <div>
             <h2>Matches</h2>
-            <p>서로 Signal이 통하면 닉네임이 공개됩니다.</p>
+            <p>실제 `matches` 테이블에서 공개된 매치를 불러옵니다.</p>
           </div>
         </div>
-        <div class="match-card">
-          <h3>Vega님과 Match!</h3>
-          <p>공통 관심사: Design · Film</p>
-          <button class="solid">AI 대화 주제 만들기</button>
-        </div>
+        <div class="stack" id="matchesList"></div>
       </section>
 
       <section id="view-me" class="view">
         <div class="section-head">
           <div>
             <h2>Me</h2>
-            <p>오늘 파티에서만 쓰는 임시 프로필입니다.</p>
+            <p>현재 participant id 기준의 내 프로필입니다.</p>
           </div>
         </div>
-        <div class="profile-card">
-          <div class="avatar large">S</div>
-          <h3>Soft Signal</h3>
-          <p>Design · Film · Night walk</p>
-          <button class="ghost wide">프로필 수정</button>
+        <div class="profile-card" id="meCard">
+          <div class="avatar large">?</div>
+          <h3>연결 필요</h3>
+          <p>Supabase 연결 정보를 저장하세요.</p>
         </div>
       </section>
 
@@ -151,27 +172,11 @@
         <div class="section-head">
           <div>
             <h2>알림</h2>
-            <p>새 Signal과 Match를 여기서 확인하세요.</p>
+            <p>실제 `notifications` 테이블에서 읽습니다.</p>
           </div>
+          <button class="ghost small" id="markAllRead">모두 읽음</button>
         </div>
-        <div class="notification-list">
-          <h3>New</h3>
-          <article class="notice unread">
-            <strong>누군가 당신에게 Signal을 보냈어요.</strong>
-            <p>서로 Signal을 보내면 공개돼요.</p>
-            <button class="ghost">People에서 찾아보기</button>
-          </article>
-          <article class="notice unread">
-            <strong>Vega님과 Match!</strong>
-            <p>공통 관심사: Design · Film</p>
-            <button class="solid">AI 대화 주제 만들기</button>
-          </article>
-          <h3>Earlier</h3>
-          <article class="notice">
-            <strong>Host 공지</strong>
-            <p>10분 뒤 단체 게임이 시작돼요.</p>
-          </article>
-        </div>
+        <div class="notification-list" id="notificationList"></div>
       </section>
     </main>
 
@@ -183,7 +188,7 @@
       <button class="nav-item" data-view="me">Me</button>
     </nav>
 
-    <div class="toast" id="toast">새 알림이 도착했어요.</div>
+    <div class="toast" id="toast">상태 메시지</div>
     <script src="./app.js"></script>
   </body>
 </html>
