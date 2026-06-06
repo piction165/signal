@@ -1,12 +1,9 @@
 const tarotCards = [
-  { name: "THE FOOL", symbol: "0", reading: "오늘은 먼저 말 거는 쪽이 이깁니다. 이상해도 시작하면 운이 따라옵니다." },
-  { name: "THE LOVERS", symbol: "VI", reading: "서로 취향 하나만 맞아도 대화가 길어집니다. 좋아하는 걸 하나 물어보세요." },
-  { name: "THE STAR", symbol: "XVII", reading: "칭찬운이 좋습니다. 관찰한 걸 짧게 말하면 분위기가 풀립니다." },
-  { name: "THE MAGICIAN", symbol: "I", reading: "말재주보다 타이밍입니다. 눈 마주치면 바로 한마디." },
-  { name: "WHEEL", symbol: "X", reading: "우연처럼 보이는 질문이 오늘의 연결이 됩니다." },
-  { name: "THE SUN", symbol: "XIX", reading: "가볍고 밝은 말이 잘 먹힙니다. 복잡하게 가지 마세요." },
-  { name: "THE MOON", symbol: "XVIII", reading: "상대의 진짜 마음보다 지금 분위기를 먼저 보세요. 천천히 열면 됩니다." },
-  { name: "TEMPERANCE", symbol: "XIV", reading: "밀고 당기기보다 리듬이 중요합니다. 질문 하나, 리액션 하나면 충분합니다." },
+  { name: "THE MOON MIRROR", image: "./assets/tarot/card-1.png", reading: "오늘은 서두르기보다 분위기를 읽는 쪽이 유리합니다. 눈이 자주 마주치는 사람이 있다면 가볍게 웃고, 바로 깊은 질문보다 지금 공간에 대한 한마디로 시작해보세요." },
+  { name: "THE STAR HANDS", image: "./assets/tarot/card-2.png", reading: "칭찬과 리액션 운이 좋습니다. 상대의 스타일, 말투, 선택한 게임 같은 구체적인 포인트를 짧게 말하면 대화가 부드럽게 열립니다." },
+  { name: "THE DISCO SUN", image: "./assets/tarot/card-3.png", reading: "밝고 장난스러운 에너지가 잘 맞는 카드입니다. 너무 멋있게 보이려 하기보다 지금 떠오른 가벼운 질문 하나를 던져보세요. 웃음이 먼저 오면 대화는 따라옵니다." },
+  { name: "THE ORBIT WHEEL", image: "./assets/tarot/card-4.png", reading: "오늘의 연결은 우연처럼 들어옵니다. 평소라면 지나칠 사람에게 한 번 더 시선을 두세요. 짧은 게임 초대나 질문 룰렛이 좋은 출발점이 됩니다." },
+  { name: "THE SIGNAL MAGICIAN", image: "./assets/tarot/card-5.png", reading: "말재주보다 타이밍이 중요한 카드입니다. 이미 신호는 충분합니다. 망설이다가 흐름을 놓치기 전에, 지금 바로 한 문장만 건네보세요." },
 ];
 
 const AI_ENDPOINT = "https://iwravorcdoswhssmnzue.supabase.co/functions/v1/signal-ai";
@@ -158,27 +155,9 @@ function drawFromBag(name, list) {
   return drawBags[name].pop();
 }
 
-function svgData(markup) {
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
-}
-
 function tarotImage(card, variant = "front", index = 1) {
-  const label = card ? card.name : "SIGNAL";
-  const symbol = card ? card.symbol : index;
-  const fill = variant === "front" ? "#ffffff" : "#111111";
-  const ink = variant === "front" ? "#111111" : "#ffffff";
-  return svgData(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 480">
-      <rect width="320" height="480" rx="28" fill="${fill}"/>
-      <rect x="20" y="20" width="280" height="440" rx="18" fill="none" stroke="${ink}" stroke-width="4"/>
-      <rect x="40" y="40" width="240" height="400" rx="12" fill="none" stroke="${ink}" stroke-width="2"/>
-      <circle cx="160" cy="178" r="70" fill="none" stroke="${ink}" stroke-width="5"/>
-      <path d="M160 90l20 58 62 2-50 36 18 60-50-36-50 36 18-60-50-36 62-2z" fill="${ink}" opacity="${variant === "front" ? "0.12" : "0.22"}"/>
-      <text x="160" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="${ink}">${symbol}</text>
-      <text x="160" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="${ink}">LOVE TAROT</text>
-      <text x="160" y="342" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="${ink}">${label}</text>
-    </svg>
-  `);
+  if (variant === "back") return "./assets/tarot/card-back.png";
+  return card?.image || `./assets/tarot/card-${index}.png`;
 }
 
 function toast(text) {
@@ -203,6 +182,21 @@ function openResultModal(kicker, title, body, extraHtml = "") {
   $("#resultModal").hidden = false;
 }
 
+function confettiHtml() {
+  return `
+    <div class="confetti" aria-hidden="true">
+      ${Array.from({ length: 44 }, (_, index) => {
+        const left = 5 + Math.random() * 90;
+        const drift = -120 + Math.random() * 240;
+        const rotate = Math.random() * 720;
+        const delay = Math.random() * 0.35;
+        const color = ["#ff4fb8", "#7c5cff", "#38d9ff", "#ffd166", "#ffffff"][index % 5];
+        return `<i style="--left:${left}%;--drift:${drift}px;--rotate:${rotate}deg;--delay:${delay}s;--color:${color}"></i>`;
+      }).join("")}
+    </div>
+  `;
+}
+
 function closeResultModal() {
   $("#resultModal").hidden = true;
 }
@@ -223,11 +217,11 @@ async function generateAiText(kind, fallbackText) {
 }
 
 function renderTarot() {
-  tarotChoices = [drawFromBag("tarot", tarotCards), drawFromBag("tarot", tarotCards), drawFromBag("tarot", tarotCards)];
-  currentText = "오늘의 타로 카드 3장 중 한 장을 고르세요.";
+  tarotChoices = Array.from({ length: 5 }, () => drawFromBag("tarot", tarotCards));
+  currentText = "오늘의 타로 카드 5장 중 한 장을 고르세요.";
   setStage(
     "LOVE TAROT",
-    "오늘의 카드 3장",
+    "오늘의 카드 5장",
     "",
     tarotChoices
       .map(
@@ -315,7 +309,7 @@ function renderBalanceMatch() {
       "BALANCE WINNER",
       winner.name,
       winner.group,
-      `<div class="winner-image">${imageCard(winner)}</div>`
+      `${confettiHtml()}<div class="winner-image">${imageCard(winner)}</div>`
     );
     return;
   }
