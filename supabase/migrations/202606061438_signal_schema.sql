@@ -22,9 +22,12 @@ create table if not exists public.signals (
   room_id uuid not null references public.party_rooms(id) on delete cascade,
   sender_id uuid not null references public.participants(id) on delete cascade,
   receiver_id uuid not null references public.participants(id) on delete cascade,
+  metadata jsonb not null default '{}',
   created_at timestamptz not null default now(),
   unique (room_id, sender_id, receiver_id)
 );
+
+alter table public.signals add column if not exists metadata jsonb not null default '{}';
 
 create table if not exists public.matches (
   id uuid primary key default gen_random_uuid(),
@@ -105,6 +108,9 @@ begin
   end if;
   if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'matches') then
     alter publication supabase_realtime add table public.matches;
+  end if;
+  if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'signals') then
+    alter publication supabase_realtime add table public.signals;
   end if;
   if not exists (select 1 from pg_publication_tables where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'game_invites') then
     alter publication supabase_realtime add table public.game_invites;

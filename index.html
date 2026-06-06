@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0b3bff" />
+    <meta name="theme-color" content="#f5f8ff" />
     <title>시그널</title>
     <link rel="stylesheet" href="./style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,7 +12,7 @@
     <main class="app-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">party signal room</p>
+          <p class="eyebrow">SIGNAL ROOM</p>
           <h1>시그널</h1>
         </div>
         <button class="icon-button" data-view="notifications" aria-label="알림">
@@ -21,68 +21,96 @@
         </button>
       </header>
 
-      <section class="setup-panel" id="setupPanel">
-        <div>
-          <p class="eyebrow">Supabase 연결</p>
-          <h2>실제 데이터를 불러오려면 연결 정보를 넣어주세요.</h2>
-        </div>
+      <section class="join-panel" id="joinPanel">
+        <p class="eyebrow">오늘 하루 사용할 이름</p>
+        <h2>닉네임을 정하고 파티룸에 들어가세요.</h2>
         <label>
-          Supabase URL
-          <input id="supabaseUrl" placeholder="https://xxxx.supabase.co" autocomplete="off" />
+          닉네임
+          <input id="nicknameInput" placeholder="예: Vega" maxlength="24" autocomplete="off" />
         </label>
         <label>
-          Supabase anon key
-          <input id="supabaseAnonKey" placeholder="eyJhbGciOi..." autocomplete="off" />
+          관심사
+          <input id="interestsInput" placeholder="예: Design, Film, Music" autocomplete="off" />
         </label>
         <label>
           Room code
-          <input id="roomCodeInput" placeholder="예: PRIDE-165" autocomplete="off" />
+          <input id="roomCodeInput" value="PRIDE-165" autocomplete="off" />
         </label>
-        <label>
-          내 participant id
-          <input id="participantIdInput" placeholder="participants.id uuid" autocomplete="off" />
-        </label>
-        <div class="button-row">
-          <button class="solid" id="saveConfig">연결 저장</button>
-          <button class="ghost" id="clearConfig">초기화</button>
-        </div>
-        <p class="hint">이 정보는 이 브라우저의 localStorage에만 저장됩니다. 공개 repo에는 키를 넣지 않습니다.</p>
+        <details class="advanced">
+          <summary>Supabase 설정</summary>
+          <label>
+            Supabase URL
+            <input id="supabaseUrl" value="https://iwravorcdoswhssmnzue.supabase.co" autocomplete="off" />
+          </label>
+          <label>
+            Supabase anon key
+            <input id="supabaseAnonKey" placeholder="Supabase anon key를 입력하세요" autocomplete="off" />
+          </label>
+        </details>
+        <button class="solid wide" id="joinRoom">시작하기</button>
+        <p class="hint">닉네임은 오늘 이 방에서만 쓰는 이름입니다. 받은 Signal에는 이 닉네임이 표시됩니다.</p>
       </section>
 
-      <section class="room-card">
+      <section class="room-strip">
         <div>
           <p class="muted">Room</p>
-          <strong id="roomLabel">연결 필요</strong>
+          <strong id="roomLabel">PRIDE-165</strong>
         </div>
         <div>
           <p class="muted">Online</p>
           <strong id="onlineCount">-</strong>
         </div>
         <div>
-          <p class="muted">Status</p>
-          <strong id="connectionState">Offline</strong>
+          <p class="muted">Me</p>
+          <strong id="meLabel">닉네임 필요</strong>
         </div>
       </section>
 
-      <section id="view-people" class="view active">
-        <div class="section-head">
-          <div>
-            <h2>People</h2>
-            <p>같은 방에 들어온 실제 참가자 목록을 불러옵니다.</p>
-          </div>
-          <button class="ghost small" id="refreshPeople">새로고침</button>
+      <section id="view-home" class="view active">
+        <div class="hero-card">
+          <p class="eyebrow">오늘의 Signal</p>
+          <h2 id="homeGreeting">시작하려면 닉네임을 정하세요.</h2>
+          <p id="homeSubtext">받은 Signal, 보낸 Signal, Match 흐름을 한눈에 봅니다.</p>
         </div>
-        <div class="people-list" id="peopleList"></div>
+        <div class="metric-grid">
+          <article class="metric-card strong">
+            <span>받은 Signal</span>
+            <strong id="homeReceivedCount">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>보낸 Signal</span>
+            <strong id="homeSentCount">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Matches</span>
+            <strong id="homeMatchCount">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>새 알림</span>
+            <strong id="homeUnreadCount">0</strong>
+          </article>
+        </div>
+        <section class="section-block">
+          <div class="section-title">
+            <h2>받은 Signal</h2>
+            <button class="text-button" data-view="signals">전체 보기</button>
+          </div>
+          <div class="stack" id="homeReceivedSignals"></div>
+        </section>
+        <section class="section-block">
+          <div class="section-title">
+            <h2>People</h2>
+            <button class="text-button" id="refreshPeople">새로고침</button>
+          </div>
+          <div class="people-list" id="peopleList"></div>
+        </section>
       </section>
 
       <section id="view-play" class="view">
         <div class="section-head">
-          <div>
-            <h2>처음 만났다면, 일단 같이 놀기</h2>
-            <p>게임 결과는 `game_sessions`에 저장할 수 있게 구성했습니다.</p>
-          </div>
+          <h2>처음 만났다면, 일단 같이 놀기</h2>
+          <p>룰렛, 주사위, 랜덤 페어링으로 가볍게 시작하세요.</p>
         </div>
-
         <div class="game-grid">
           <article class="game-card primary">
             <p class="muted">Topic Roulette</p>
@@ -92,7 +120,6 @@
               <button class="ghost" id="saveRoulette">결과 저장</button>
             </div>
           </article>
-
           <article class="game-card">
             <p class="muted">Dice Mission</p>
             <div class="dice" id="diceValue">-</div>
@@ -102,77 +129,52 @@
               <button class="ghost">Pass</button>
             </div>
           </article>
-
-          <article class="game-card">
-            <p class="muted">Ladder Game</p>
-            <h3 id="ladderResult">참가자를 불러온 뒤 실행할 수 있습니다.</h3>
-            <button class="solid wide" id="runLadder">사다리타기 시작</button>
-          </article>
-
           <article class="game-card">
             <p class="muted">Random Pairing</p>
             <h3 id="pairName">아직 추천 없음</h3>
-            <p id="pairLine">실제 참가자 중 온라인/공개 상태인 사람을 추천합니다.</p>
+            <p id="pairLine">실제 참가자 중 한 명을 추천합니다.</p>
             <div class="button-row">
               <button class="solid" id="signalPair">Signal 보내기</button>
               <button class="ghost" id="nextPair">다른 사람</button>
             </div>
-          </article>
-
-          <article class="game-card">
-            <p class="muted">AI Icebreaker</p>
-            <h3>대화 주제 3개</h3>
-            <ul id="icebreakers">
-              <li>OpenAI 서버 엔드포인트 연결 후 실제 생성 결과를 표시합니다.</li>
-            </ul>
-            <button class="solid wide" id="makeIcebreaker">AI 주제 요청 기록</button>
           </article>
         </div>
       </section>
 
       <section id="view-signals" class="view">
         <div class="section-head">
-          <div>
-            <h2>Signals</h2>
-            <p>받은 Signal은 실제 `signals` 테이블 기준으로 집계합니다.</p>
-          </div>
+          <h2>Signals</h2>
+          <p>받은 Signal에는 상대의 하루 닉네임이 표시됩니다.</p>
         </div>
-        <div class="stat-card">
-          <span>받은 Signal</span>
-          <strong id="receivedSignalCount">-</strong>
-          <p id="signalHelp">Supabase 연결 후 확인할 수 있습니다.</p>
+        <div class="stack" id="receivedSignalsList"></div>
+        <div class="section-title secondary">
+          <h2>내가 보낸 Signal</h2>
         </div>
+        <div class="stack" id="sentSignalsList"></div>
       </section>
 
       <section id="view-matches" class="view">
         <div class="section-head">
-          <div>
-            <h2>Matches</h2>
-            <p>실제 `matches` 테이블에서 공개된 매치를 불러옵니다.</p>
-          </div>
+          <h2>Matches</h2>
+          <p>서로 Signal이 통하면 여기에서 확인합니다.</p>
         </div>
         <div class="stack" id="matchesList"></div>
       </section>
 
       <section id="view-me" class="view">
-        <div class="section-head">
-          <div>
-            <h2>Me</h2>
-            <p>현재 participant id 기준의 내 프로필입니다.</p>
-          </div>
-        </div>
         <div class="profile-card" id="meCard">
           <div class="avatar large">?</div>
-          <h3>연결 필요</h3>
-          <p>Supabase 연결 정보를 저장하세요.</p>
+          <h3>닉네임 필요</h3>
+          <p>시작 화면에서 닉네임을 정하세요.</p>
         </div>
+        <button class="ghost wide" id="resetMe">닉네임 다시 정하기</button>
       </section>
 
       <section id="view-notifications" class="view">
-        <div class="section-head">
+        <div class="section-head row">
           <div>
             <h2>알림</h2>
-            <p>실제 `notifications` 테이블에서 읽습니다.</p>
+            <p>Signal, Match, 게임 초대를 확인합니다.</p>
           </div>
           <button class="ghost small" id="markAllRead">모두 읽음</button>
         </div>
@@ -181,7 +183,7 @@
     </main>
 
     <nav class="bottom-nav">
-      <button class="nav-item active" data-view="people">People</button>
+      <button class="nav-item active" data-view="home">Home</button>
       <button class="nav-item" data-view="play">Play</button>
       <button class="nav-item" data-view="signals">Signals</button>
       <button class="nav-item" data-view="matches">Matches</button>

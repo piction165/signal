@@ -1,13 +1,12 @@
 # 시그널
 
-Mobile-first party web app preview for real Supabase data.
-
 ## What is included
 
-- Blue mobile UI
-- People / Play / Signals / Matches / Me bottom navigation
-- Notification page
-- Supabase browser connection panel
+- Apple-inspired blue mobile UI
+- Nickname-first start screen
+- Home / Play / Signals / Matches / Me bottom navigation
+- Home hierarchy for received signals, sent signals, matches, and notifications
+- Received signals reveal the sender's daily nickname
 - Real `participants`, `signals`, `matches`, `notifications`, and `game_sessions` reads/writes
 - Realtime subscription for notifications, participants, and matches
 - Supabase migration in `supabase/migrations/202606061438_signal_schema.sql`
@@ -19,13 +18,9 @@ Mobile-first party web app preview for real Supabase data.
 3. Insert a `party_rooms` row with a `room_code`.
 4. Insert one or more `participants` rows for that room.
 5. Open the GitHub Pages app.
-6. Enter:
-   - Supabase URL
-   - Supabase anon key
-   - Room code
-   - Current participant id
+6. Enter the Supabase anon key, room code, and today's nickname.
 
-The app stores this configuration only in browser `localStorage`.
+The app stores the current participant session only in browser `localStorage`.
 
 ## Notes
 
