@@ -12,159 +12,114 @@
     <main class="app-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">LOL EVENT SIGNAL</p>
+          <p class="eyebrow">LOL CONVERSATION SIGNAL</p>
           <h1>시그널</h1>
         </div>
-        <button class="icon-button" data-view="notifications" aria-label="알림">
-          <span class="badge" id="badge">0</span>
-          <span>알림</span>
-        </button>
+        <button class="icon-button" id="shareAppTop" aria-label="앱 공유하기">공유</button>
       </header>
 
-      <section class="join-panel" id="joinPanel">
-        <p class="eyebrow">오늘 하루 사용할 이름</p>
-        <h2>닉네임만 정하고 바로 시작하세요.</h2>
-        <label>
-          닉네임
-          <input id="nicknameInput" placeholder="예: Vega" maxlength="24" autocomplete="off" />
-        </label>
-        <label>
-          관심사
-          <input id="interestsInput" placeholder="예: Design, Film, Music" autocomplete="off" />
-        </label>
-        <button class="solid wide" id="joinRoom">시작하기</button>
-        <p class="hint">로그인 없이 LOL 행사 안에서만 쓰는 하루 닉네임입니다. 받은 Signal에는 이 이름이 표시됩니다.</p>
-      </section>
+      <section id="view-talk" class="view active">
+        <article class="hero-card">
+          <p class="eyebrow">지금 꺼낼 한마디</p>
+          <h2 id="homeGreeting">말 걸 타이밍을 가볍게 만들어줍니다.</h2>
+          <p id="homeSubtext">휴대폰은 잠깐 열고, 대화는 바로 눈앞에서 이어가세요.</p>
+        </article>
 
-      <section class="event-strip">
-        <div>
-          <p class="muted">Event</p>
-          <strong id="eventLabel">LOL Signal</strong>
-        </div>
-        <div>
-          <p class="muted">Live</p>
-          <strong id="onlineCount">-</strong>
-        </div>
-        <div>
-          <p class="muted">Me</p>
-          <strong id="meLabel">닉네임 필요</strong>
-        </div>
-      </section>
+        <article class="prompt-card">
+          <p class="muted" id="promptMeta">첫 대화</p>
+          <h2 id="promptText">오늘 여기서 제일 먼저 눈에 들어온 건 뭐였어요?</h2>
+          <div class="button-row">
+            <button class="solid" id="nextPrompt">다른 말</button>
+            <button class="ghost" id="copyPrompt">복사</button>
+          </div>
+          <button class="text-button wide" id="savePrompt">이 카드 저장</button>
+        </article>
 
-      <section id="view-home" class="view active">
-        <div class="hero-card">
-          <p class="eyebrow">LOL 행사 실시간 시그널</p>
-          <h2 id="homeGreeting">시작하려면 닉네임을 정하세요.</h2>
-          <p id="homeSubtext">QR로 들어와 가볍게 프로필을 보고, Signal을 보내고, 짧은 대화 계기를 만듭니다.</p>
-        </div>
-        <div class="metric-grid">
-          <article class="metric-card strong">
-            <span>받은 Signal</span>
-            <strong id="homeReceivedCount">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>보낸 Signal</span>
-            <strong id="homeSentCount">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>저장된 Play</span>
-            <strong id="homePlayCount">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>새 알림</span>
-            <strong id="homeUnreadCount">0</strong>
-          </article>
-        </div>
         <section class="section-block">
           <div class="section-title">
-            <h2>받은 Signal</h2>
-            <button class="text-button" data-view="signals">전체 보기</button>
+            <h2>상황별로 꺼내기</h2>
           </div>
-          <div class="stack" id="homeReceivedSignals"></div>
-        </section>
-        <section class="section-block">
-          <div class="section-title">
-            <h2>People</h2>
-            <button class="text-button" id="refreshPeople">새로고침</button>
+          <div class="action-grid">
+            <button class="quick-card" data-open-game="opener">
+              <span>처음 말 걸기</span>
+              <strong>어색하지 않은 첫 문장</strong>
+            </button>
+            <button class="quick-card" data-open-game="awkward">
+              <span>어색함 깨기</span>
+              <strong>웃고 넘어갈 질문</strong>
+            </button>
+            <button class="quick-card" data-open-game="either">
+              <span>둘 중 하나</span>
+              <strong>바로 대답되는 선택지</strong>
+            </button>
+            <button class="quick-card" data-open-game="bridge">
+              <span>다음 대화</span>
+              <strong>끊기지 않게 넘기기</strong>
+            </button>
           </div>
-          <div class="people-list" id="peopleList"></div>
         </section>
       </section>
 
-      <section id="view-play" class="view">
+      <section id="view-cards" class="view">
         <div class="section-head">
-          <h2>오늘의 작은 도파민</h2>
-          <p>길게 붙잡는 게임이 아니라, 바로 웃고 바로 말 걸 수 있는 짧은 카드입니다.</p>
+          <h2>짧은 대화 카드</h2>
+          <p>오래 붙잡는 기능이 아니라, 대화가 자연스럽게 열리게 만드는 작은 트리거입니다.</p>
         </div>
         <div class="game-grid">
           <article class="game-card primary">
-            <p class="muted">Love Fortune</p>
-            <h3>오늘의 연애운을 봅니다.</h3>
-            <button class="solid wide" data-open-game="love">열기</button>
-          </article>
-          <article class="game-card">
-            <p class="muted">Question Roulette</p>
-            <h3>채팅처럼 질문을 이어갑니다.</h3>
-            <button class="solid wide" data-open-game="questions">열기</button>
+            <p class="muted">Mood Pick</p>
+            <h3>지금 분위기에 맞는 말을 뽑습니다.</h3>
+            <button class="solid wide" data-open-game="questions">뽑기</button>
           </article>
           <article class="game-card">
             <p class="muted">Fortune Cookie</p>
-            <h3>오늘의 한 줄 시그널을 엽니다.</h3>
+            <h3>가볍게 건넬 한 줄을 엽니다.</h3>
             <button class="solid wide" data-open-game="cookie">열기</button>
           </article>
           <article class="game-card">
-            <p class="muted">Random Pairing</p>
-            <h3>지금 행사 안의 누군가를 추천합니다.</h3>
-            <button class="solid wide" data-open-game="pairing">열기</button>
+            <p class="muted">Love Signal</p>
+            <h3>살짝 장난스러운 오늘의 시그널.</h3>
+            <button class="solid wide" data-open-game="love">보기</button>
+          </article>
+          <article class="game-card">
+            <p class="muted">Saved</p>
+            <h3>방금 좋았던 카드를 다시 봅니다.</h3>
+            <button class="ghost wide" data-view="share">저장함 보기</button>
           </article>
         </div>
       </section>
 
-      <section id="view-signals" class="view">
+      <section id="view-share" class="view">
         <div class="section-head">
-          <h2>Signals</h2>
-          <p>받은 Signal에는 상대의 하루 닉네임이 표시됩니다.</p>
+          <h2>공유와 저장</h2>
+          <p>같이 있는 사람에게 링크를 넘기거나, 좋은 문장을 잠깐 저장합니다.</p>
         </div>
-        <div class="stack" id="receivedSignalsList"></div>
-        <div class="section-title secondary">
-          <h2>내가 보낸 Signal</h2>
-        </div>
-        <div class="stack" id="sentSignalsList"></div>
-      </section>
-
-      <section id="view-me" class="view">
-        <div class="profile-card" id="meCard">
-          <div class="avatar large">?</div>
-          <h3>닉네임 필요</h3>
-          <p>시작 화면에서 닉네임을 정하세요.</p>
-        </div>
-        <button class="ghost wide" id="resetMe">닉네임 다시 정하기</button>
-      </section>
-
-      <section id="view-notifications" class="view">
-        <div class="section-head row">
-          <div>
-            <h2>알림</h2>
-            <p>Signal, Match, 게임 초대를 확인합니다.</p>
+        <article class="share-panel">
+          <p class="muted">앱 공유하기</p>
+          <h3>같은 QR을 못 본 사람에게 바로 넘기세요.</h3>
+          <button class="solid wide" id="shareAppMain">공유하기</button>
+        </article>
+        <section class="section-block">
+          <div class="section-title">
+            <h2>저장한 카드</h2>
+            <button class="text-button" id="clearSaved">비우기</button>
           </div>
-          <button class="ghost small" id="markAllRead">모두 읽음</button>
-        </div>
-        <div class="notification-list" id="notificationList"></div>
+          <div class="stack" id="savedList"></div>
+        </section>
       </section>
     </main>
 
     <nav class="bottom-nav">
-      <button class="nav-item active" data-view="home">Home</button>
-      <button class="nav-item" data-view="play">Play</button>
-      <button class="nav-item" data-view="signals">Signals</button>
-      <button class="nav-item" data-view="me">Me</button>
+      <button class="nav-item active" data-view="talk">Talk</button>
+      <button class="nav-item" data-view="cards">Cards</button>
+      <button class="nav-item" data-view="share">Share</button>
     </nav>
 
     <div class="modal-backdrop" id="gameModal" aria-hidden="true">
       <section class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <button class="modal-close" id="closeModal" aria-label="닫기">닫기</button>
-        <p class="eyebrow" id="modalKicker">PLAY</p>
-        <h2 id="modalTitle">미니 인터랙션</h2>
+        <p class="eyebrow" id="modalKicker">SIGNAL</p>
+        <h2 id="modalTitle">대화 카드</h2>
         <div class="modal-content" id="modalContent"></div>
       </section>
     </div>

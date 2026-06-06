@@ -1,43 +1,26 @@
 # 시그널
 
-## What is included
+LOL 행사에서 QR로 열어 쓰는 초간단 대화 보조 웹앱입니다. 접속/룸/세션을 전면에 세우지 않고, 바로 옆 사람에게 꺼낼 수 있는 한마디와 공유 버튼을 중심으로 둡니다.
+
+## Included
 
 - Black and white mobile UI
-- Nickname-first start screen
-- LOL event-only QR entry flow with no visible room code
-- Home / Play / Signals / Me bottom navigation
-- Home hierarchy for received signals, sent signals, saved play results, and notifications
-- Received signals reveal the sender's daily nickname
-- Mini-games open as short modal interactions instead of full-page game screens
-- AI-backed love fortune, fortune cookie, and chat-style question roulette through a Supabase Edge Function
-- Real `participants`, `signals`, `matches`, `notifications`, and `game_sessions` reads/writes
-- Realtime subscription for notifications, participants, and matches
-- Supabase migration in `supabase/migrations/202606061438_signal_schema.sql`
+- No visible room code or setup flow
+- Immediate conversation prompt on first screen
+- Situation cards for first line, awkward moment, this-or-that, and next line
+- Share button for passing the app link to someone nearby
+- Local saved cards
+- Optional Supabase background storage for saved conversation cards
+- Optional AI-backed mood card, love signal, and fortune cookie through a Supabase Edge Function
+- Migration: `supabase/migrations/202606061438_signal_schema.sql`
 
-## How to connect real data
+## Backend Notes
 
-1. Create a Supabase project.
-2. Run `supabase/migrations/202606061438_signal_schema.sql` in the Supabase SQL editor.
-3. The app creates/uses the internal event key `LOL-EVENT`.
-4. Insert one or more `participants` rows for that event if you want preloaded test users.
-5. Open the GitHub Pages app.
-6. Enter today's nickname.
+The frontend uses the internal event key `LOL-EVENT` only as backend metadata. It is not shown in the UI.
 
-The app stores the current participant session only in browser `localStorage`.
-
-## AI function
-
-The frontend calls `supabase.functions.invoke("signal-ai")`. Do not put an OpenAI key in frontend code.
-
-Deploy the Edge Function and set the key as a Supabase secret:
+AI calls go through `supabase.functions.invoke("signal-ai")`. Do not put an OpenAI key in frontend code.
 
 ```bash
 supabase functions deploy signal-ai --project-ref iwravorcdoswhssmnzue
 supabase secrets set OPENAI_API_KEY=... --project-ref iwravorcdoswhssmnzue
 ```
-
-The function uses OpenAI's Responses API for text generation and stores user-facing results back into `game_sessions`.
-
-## Notes
-
-This is still a GitHub Pages static preview. Production should move backend writes to a server route, tighten RLS policies, and move AI Icebreaker generation to a server-side OpenAI endpoint.

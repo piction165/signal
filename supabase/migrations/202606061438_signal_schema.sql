@@ -69,6 +69,7 @@ create table if not exists public.game_sessions (
     game_type in (
       'topic_roulette',
       'question_roulette',
+      'conversation_card',
       'dice_mission',
       'love_fortune',
       'fortune_cookie',
@@ -89,6 +90,7 @@ alter table public.game_sessions add constraint game_sessions_game_type_check ch
   game_type in (
     'topic_roulette',
     'question_roulette',
+    'conversation_card',
     'dice_mission',
     'love_fortune',
     'fortune_cookie',

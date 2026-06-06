@@ -107,14 +107,14 @@ h3 {
   font-weight: 900;
 }
 
-.join-panel,
-.event-strip,
 .hero-card,
-.metric-card,
+.prompt-card,
 .section-block,
 .section-head,
 .person,
 .game-card,
+.quick-card,
+.share-panel,
 .signal-card,
 .match-card,
 .profile-card,
@@ -125,17 +125,6 @@ h3 {
   background: var(--surface);
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
-}
-
-.join-panel {
-  display: grid;
-  gap: 13px;
-  margin-bottom: 14px;
-  padding: 18px;
-}
-
-.join-panel.hidden {
-  display: none;
 }
 
 label {
@@ -178,20 +167,6 @@ input:focus {
   line-height: 1.45;
 }
 
-.event-strip {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
-  padding: 13px;
-}
-
-.event-strip strong {
-  display: block;
-  margin-top: 4px;
-  font-size: 14px;
-}
-
 .view {
   display: none;
 }
@@ -223,32 +198,15 @@ input:focus {
   line-height: 1.42;
 }
 
-.metric-grid {
+.prompt-card {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 14px;
+  padding: 18px;
 }
 
-.metric-card {
-  padding: 15px;
-}
-
-.metric-card span {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.metric-card strong {
-  display: block;
-  margin-top: 8px;
-  color: var(--ink);
-  font-size: 32px;
-  line-height: 1;
-}
-
-.metric-card.strong {
-  background: var(--surface-strong);
+.prompt-card h2 {
+  font-size: 25px;
+  line-height: 1.22;
 }
 
 .section-block,
@@ -286,10 +244,35 @@ input:focus {
 
 .people-list,
 .game-grid,
+.action-grid,
 .notification-list,
 .stack {
   display: grid;
   gap: 10px;
+}
+
+.action-grid {
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 12px;
+}
+
+.quick-card {
+  display: grid;
+  gap: 7px;
+  min-height: 104px;
+  padding: 14px;
+  text-align: left;
+}
+
+.quick-card span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.quick-card strong {
+  font-size: 16px;
+  line-height: 1.25;
 }
 
 .section-block .people-list,
@@ -435,6 +418,12 @@ input:focus {
   text-align: center;
 }
 
+.share-panel {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+}
+
 .notice.unread {
   border-color: rgba(0, 0, 0, 0.22);
   background: #f7fbff;
@@ -446,7 +435,7 @@ input:focus {
   bottom: 0;
   left: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   width: min(100%, 480px);
   margin: 0 auto;
   padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
