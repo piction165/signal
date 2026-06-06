@@ -34,22 +34,22 @@ const rouletteQuestions = [
 ];
 
 const balanceSeeds = [
-  "장원영 · IVE",
-  "안유진 · IVE",
-  "리즈 · IVE",
-  "레이 · IVE",
-  "카리나 · aespa",
-  "윈터 · aespa",
-  "닝닝 · aespa",
-  "제니 · BLACKPINK",
-  "로제 · BLACKPINK",
-  "리사 · BLACKPINK",
-  "김채원 · LE SSERAFIM",
-  "사쿠라 · LE SSERAFIM",
-  "허윤진 · LE SSERAFIM",
-  "원희 · ILLIT",
-  "민주 · ILLIT",
-  "설윤 · NMIXX",
+  { name: "장원영", group: "IVE", accent: "#111111" },
+  { name: "안유진", group: "IVE", accent: "#2b2b2b" },
+  { name: "리즈", group: "IVE", accent: "#444444" },
+  { name: "카리나", group: "aespa", accent: "#111111" },
+  { name: "윈터", group: "aespa", accent: "#343434" },
+  { name: "닝닝", group: "aespa", accent: "#555555" },
+  { name: "제니", group: "BLACKPINK", accent: "#111111" },
+  { name: "로제", group: "BLACKPINK", accent: "#2f2f2f" },
+  { name: "리사", group: "BLACKPINK", accent: "#4d4d4d" },
+  { name: "김채원", group: "LE SSERAFIM", accent: "#111111" },
+  { name: "사쿠라", group: "LE SSERAFIM", accent: "#303030" },
+  { name: "허윤진", group: "LE SSERAFIM", accent: "#505050" },
+  { name: "원희", group: "ILLIT", accent: "#111111" },
+  { name: "민주", group: "ILLIT", accent: "#353535" },
+  { name: "설윤", group: "NMIXX", accent: "#111111" },
+  { name: "마스다 아야노", group: "CUTIE STREET", accent: "#1f4f8f" },
 ];
 
 let mode = "roulette";
@@ -76,6 +76,46 @@ function drawFromBag(name, list) {
     drawBags[name] = shuffle(list);
   }
   return drawBags[name].pop();
+}
+
+function svgData(markup) {
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
+}
+
+function idolImage(person) {
+  const initials = person.name.replace(/\s+/g, "").slice(0, 2);
+  return svgData(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480">
+      <rect width="360" height="480" fill="#f7f7f4"/>
+      <rect x="18" y="18" width="324" height="444" rx="20" fill="white" stroke="#111" stroke-width="3"/>
+      <circle cx="180" cy="158" r="72" fill="${person.accent}"/>
+      <path d="M84 386c12-82 76-126 96-126s84 44 96 126" fill="${person.accent}"/>
+      <circle cx="156" cy="150" r="8" fill="white"/>
+      <circle cx="204" cy="150" r="8" fill="white"/>
+      <path d="M150 194c20 18 40 18 60 0" fill="none" stroke="white" stroke-width="8" stroke-linecap="round"/>
+      <text x="180" y="84" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#111">${person.group}</text>
+      <text x="180" y="438" text-anchor="middle" font-family="Arial, sans-serif" font-size="46" font-weight="900" fill="#111">${initials}</text>
+    </svg>
+  `);
+}
+
+function tarotImage(card, variant = "front", index = 1) {
+  const label = card ? card.name : "SIGNAL";
+  const symbol = card ? card.symbol : index;
+  const fill = variant === "front" ? "#ffffff" : "#111111";
+  const ink = variant === "front" ? "#111111" : "#ffffff";
+  return svgData(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 480">
+      <rect width="320" height="480" rx="28" fill="${fill}"/>
+      <rect x="20" y="20" width="280" height="440" rx="18" fill="none" stroke="${ink}" stroke-width="4"/>
+      <rect x="40" y="40" width="240" height="400" rx="12" fill="none" stroke="${ink}" stroke-width="2"/>
+      <circle cx="160" cy="178" r="70" fill="none" stroke="${ink}" stroke-width="5"/>
+      <path d="M160 90l20 58 62 2-50 36 18 60-50-36-50 36 18-60-50-36 62-2z" fill="${ink}" opacity="${variant === "front" ? "0.12" : "0.22"}"/>
+      <text x="160" y="112" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="${ink}">${symbol}</text>
+      <text x="160" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="${ink}">LOVE TAROT</text>
+      <text x="160" y="342" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="${ink}">${label}</text>
+    </svg>
+  `);
 }
 
 function toast(text) {
@@ -131,9 +171,7 @@ function renderTarot() {
         (_, index) => `
           <button class="tarot-card" data-tarot-index="${index}" aria-label="${index + 1}번 타로 카드 선택">
             <span class="tarot-back">
-              <small>SIGNAL</small>
-              <strong>${index + 1}</strong>
-              <em>LOVE TAROT</em>
+              <img src="${tarotImage(null, "back", index + 1)}" alt="${index + 1}번 타로 카드" />
             </span>
           </button>
         `
@@ -153,9 +191,7 @@ function chooseTarot(index) {
     `
       <div class="tarot-result">
         <div class="tarot-face">
-          <small>${card.symbol}</small>
-          <strong>${card.name}</strong>
-          <span>LOVE</span>
+          <img src="${tarotImage(card, "front")}" alt="${card.name} 타로 카드" />
         </div>
       </div>
     `
@@ -204,14 +240,20 @@ function startBalance() {
 
 function renderBalanceMatch() {
   if (bracket.length === 1) {
-    currentText = bracket[0];
+    const winner = bracket[0];
+    currentText = `${winner.name} · ${winner.group}`;
     setStage(
       "BALANCE WINNER",
-      bracket[0],
+      winner.name,
       "",
       `<button class="primary" id="drawButton">다시 16강</button><button id="copyButton">복사</button>`
     );
-    openResultModal("BALANCE WINNER", bracket[0], "");
+    openResultModal(
+      "BALANCE WINNER",
+      winner.name,
+      winner.group,
+      `<div class="winner-image"><img src="${idolImage(winner)}" alt="${winner.name} 이미지 카드" /></div>`
+    );
     return;
   }
 
@@ -226,17 +268,30 @@ function renderBalanceMatch() {
   const right = bracket[matchIndex + 1];
   const currentRound = roundSize === 2 ? "FINAL" : `${roundSize}강`;
   const progress = `${Math.floor(matchIndex / 2) + 1}/${Math.floor(bracket.length / 2)}`;
-  currentText = `${left} vs ${right}`;
+  currentText = `${left.name} vs ${right.name}`;
   setStage(
     `BALANCE ${currentRound} ${progress}`,
     "둘 중 더 끌리는 쪽은?",
     "",
-    `<button class="choice" data-choice="${left}">${left}</button><button class="choice" data-choice="${right}">${right}</button>`
+    `
+      <button class="choice choice-card" data-choice-index="0">
+        <img src="${idolImage(left)}" alt="${left.name} 이미지 카드" />
+        <span>${left.group}</span>
+        <strong>${left.name}</strong>
+      </button>
+      <button class="choice choice-card" data-choice-index="1">
+        <img src="${idolImage(right)}" alt="${right.name} 이미지 카드" />
+        <span>${right.group}</span>
+        <strong>${right.name}</strong>
+      </button>
+    `
   );
 }
 
-function chooseBalance(value) {
-  nextRound.push(value);
+function chooseBalance(choiceIndex) {
+  const picked = bracket[matchIndex + choiceIndex];
+  if (!picked) return;
+  nextRound.push(picked);
   matchIndex += 2;
   renderBalanceMatch();
 }
@@ -294,7 +349,8 @@ document.addEventListener("click", (event) => {
     if (mode === "roulette") openRouletteResult();
   }
   if (event.target.id === "copyButton") copyCurrent();
-  if (event.target.dataset.choice) chooseBalance(event.target.dataset.choice);
+  const choiceButton = event.target.closest("[data-choice-index]");
+  if (choiceButton) chooseBalance(Number(choiceButton.dataset.choiceIndex));
   const tarotButton = event.target.closest("[data-tarot-index]");
   if (tarotButton) chooseTarot(Number(tarotButton.dataset.tarotIndex));
 });
