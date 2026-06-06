@@ -4,22 +4,27 @@ const DEFAULT_SUPABASE_ANON_KEY = "sb_publishable_bK_JuZ6qGdlfypAbfE0Btg_nDgBpom
 const EVENT_CODE = "LOL-EVENT";
 const EVENT_NAME = "LOL Signal";
 
-const topics = [
-  "오늘 여기 오게 된 이유는?",
-  "오늘의 vibe를 노래 제목으로 말한다면?",
-  "서로 첫인상을 한 단어로 말해보기",
-  "요즘 가장 빠져있는 것 하나 말하기",
-  "연애할 때 가장 큰 green flag는?",
-  "오늘 파티에서 꼭 하고 싶은 것 하나",
+const localQuestions = [
+  "오늘 여기서 제일 먼저 눈에 들어온 건 뭐였어요?",
+  "처음 만난 사람에게 의외로 잘 물어보는 질문이 있어요?",
+  "연애할 때 나를 바로 웃게 만드는 포인트는?",
+  "오늘의 나를 영화 장르로 말하면?",
+  "상대가 해주면 은근히 설레는 작은 행동은?",
+  "오늘 끝나기 전에 꼭 하나 해보고 싶은 건?",
 ];
 
-const missions = [
-  "서로 닉네임의 뜻 말하기",
-  "지금 기분을 이모지 3개로 표현하기",
-  "상대방에게 질문 하나 하기",
-  "오늘 가장 마음에 드는 스타일 말하기",
-  "둘 다 좋아하는 관심사 찾기",
-  "같이 사진 찍기 or 인스타 교환하기, 선택 가능",
+const localFortunes = [
+  "오늘은 먼저 웃어주는 사람이 이깁니다. 짧은 Signal 하나가 분위기를 바꿀 수 있어요.",
+  "대화운이 좋습니다. 완벽한 멘트보다 가벼운 질문이 더 잘 통합니다.",
+  "타이밍운이 강합니다. 눈이 한 번 더 마주치면 그냥 인사해도 됩니다.",
+  "오늘의 매력은 담백함입니다. 과한 설명보다 한 문장이 오래 남습니다.",
+];
+
+const localCookies = [
+  "지금 저장한 용기가 오늘의 하이라이트가 됩니다.",
+  "가장 좋은 질문은 이미 네 관심사 안에 있습니다.",
+  "상대도 신호를 기다리고 있을 수 있습니다.",
+  "오늘의 연결은 길게 말하는 쪽보다 먼저 다가가는 쪽에 있습니다.",
 ];
 
 const state = {
@@ -31,9 +36,11 @@ const state = {
   receivedSignals: [],
   sentSignals: [],
   matches: [],
+  playSessions: [],
   notifications: [],
   selectedPair: null,
   currentGame: null,
+  questionMessages: [],
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -179,7 +186,7 @@ async function restoreSession(session) {
 }
 
 async function refreshAll() {
-  await Promise.all([loadPeople(), loadSignals(), loadNotifications(), loadMatches()]);
+  await Promise.all([loadPeople(), loadSignals(), loadNotifications(), loadPlaySessions()]);
   renderAll();
 }
 
@@ -225,15 +232,15 @@ async function loadNotifications() {
   state.notifications = data || [];
 }
 
-async function loadMatches() {
+async function loadPlaySessions() {
   const { data, error } = await state.client
-    .from("matches")
+    .from("game_sessions")
     .select("*")
     .eq("room_id", state.room.id)
-    .or(`participant_a.eq.${state.me.id},participant_b.eq.${state.me.id}`)
+    .contains("participants", [state.me.id])
     .order("created_at", { ascending: false });
   if (error) throw error;
-  state.matches = data || [];
+  state.playSessions = data || [];
 }
 
 function renderSignedOut() {
@@ -247,7 +254,6 @@ function renderSignedOut() {
   $("#homeReceivedSignals").innerHTML = emptyCard("받은 Signal 없음", "입장 후 받은 Signal이 표시됩니다.");
   $("#receivedSignalsList").innerHTML = emptyCard("받은 Signal 없음", "입장 후 확인할 수 있습니다.");
   $("#sentSignalsList").innerHTML = emptyCard("보낸 Signal 없음", "입장 후 확인할 수 있습니다.");
-  $("#matchesList").innerHTML = emptyCard("Match 없음", "입장 후 확인할 수 있습니다.");
   $("#notificationList").innerHTML = emptyCard("알림 없음", "입장 후 확인할 수 있습니다.");
 }
 
@@ -263,11 +269,10 @@ function renderAll() {
   $("#homeUnreadCount").textContent = String(unread);
   $("#homeReceivedCount").textContent = String(state.receivedSignals.length);
   $("#homeSentCount").textContent = String(state.sentSignals.length);
-  $("#homeMatchCount").textContent = String(state.matches.length);
+  $("#homePlayCount").textContent = String(state.playSessions.length);
 
   renderPeople();
   renderSignalLists();
-  renderMatches();
   renderNotifications();
   renderMe();
 }
@@ -322,24 +327,6 @@ function renderSignals(signals, participantKey, emptyText) {
         </article>
       `;
     })
-    .join("");
-}
-
-function renderMatches() {
-  if (!state.matches.length) {
-    $("#matchesList").innerHTML = emptyCard("아직 Match 없음", "서로 Signal이 통하면 여기에 표시됩니다.");
-    return;
-  }
-  $("#matchesList").innerHTML = state.matches
-    .map(
-      (match) => `
-        <article class="match-card">
-          <h3>${escapeHtml(match.title || "Match!")}</h3>
-          <p>${escapeHtml(match.metadata?.summary || "서로 Signal이 통했어요.")}</p>
-          <button class="solid">대화 주제 보기</button>
-        </article>
-      `
-    )
     .join("");
 }
 
@@ -407,17 +394,43 @@ async function sendSignal(receiverId) {
 async function saveGameSession(gameType, resultData) {
   if (!state.client || !state.me) {
     showToast("먼저 닉네임을 정하세요.");
-    return;
+    return null;
   }
-  const { error } = await state.client.from("game_sessions").insert({
+  const { data, error } = await state.client.from("game_sessions").insert({
     room_id: state.room.id,
     created_by: state.me.id,
     game_type: gameType,
     participants: [state.me.id],
     input_data: {},
     result_data: resultData,
-  });
+  }).select("*").single();
   showToast(error ? error.message : "저장했습니다.");
+  if (!error) {
+    state.playSessions = [data, ...state.playSessions];
+    $("#homePlayCount").textContent = String(state.playSessions.length);
+  }
+  return error ? null : data;
+}
+
+async function callSignalAi(mode, messages = []) {
+  if (!state.client || !state.me) throw new Error("먼저 닉네임을 정하세요.");
+  const context = {
+    event: EVENT_NAME,
+    nickname: participantName(state.me),
+    interests: participantTags(state.me),
+  };
+  const { data, error } = await state.client.functions.invoke("signal-ai", {
+    body: { mode, messages, context },
+  });
+  if (error) throw error;
+  if (!data?.text) throw new Error("응답이 비어 있습니다.");
+  return data.text;
+}
+
+function fallbackAi(mode) {
+  if (mode === "love") return pick(localFortunes);
+  if (mode === "cookie") return pick(localCookies);
+  return pick(localQuestions);
 }
 
 function choosePair() {
@@ -445,34 +458,42 @@ function renderModal(type) {
   const kicker = $("#modalKicker");
   const content = $("#modalContent");
 
-  if (type === "roulette") {
-    kicker.textContent = "TOPIC ROULETTE";
-    title.textContent = "지금 꺼낼 대화 주제";
+  if (type === "love" || type === "cookie") {
+    const isLove = type === "love";
+    kicker.textContent = isLove ? "LOVE FORTUNE" : "FORTUNE COOKIE";
+    title.textContent = isLove ? "오늘의 연애운" : "오늘의 한 줄 시그널";
     content.innerHTML = `
-      <div class="modal-result" id="rouletteTopic">버튼을 누르면 주제가 나옵니다.</div>
+      <div class="modal-result" id="aiResult">${isLove ? "오늘의 연애운을 열어보세요." : "포춘쿠키를 열어보세요."}</div>
       <div class="button-row">
-        <button class="solid" id="spinRoulette">뽑기</button>
-        <button class="ghost" id="saveRoulette">저장</button>
+        <button class="solid" id="drawAiCard">${isLove ? "운세 보기" : "열기"}</button>
+        <button class="ghost" id="saveAiCard">저장</button>
       </div>
     `;
-    $("#spinRoulette").addEventListener("click", spinRoulette);
-    $("#saveRoulette").addEventListener("click", () => saveGameSession("topic_roulette", { topic: $("#rouletteTopic").textContent }));
+    $("#drawAiCard").addEventListener("click", () => drawAiCard(type));
+    $("#saveAiCard").addEventListener("click", () => saveGameSession(type === "love" ? "love_fortune" : "fortune_cookie", { text: $("#aiResult").textContent }));
     return;
   }
 
-  if (type === "dice") {
-    kicker.textContent = "DICE MISSION";
-    title.textContent = "짧은 미션";
+  if (type === "questions") {
+    state.questionMessages = [
+      { role: "assistant", content: "질문 룰렛을 시작합니다. 아래 버튼을 누르면 지금 분위기에 맞는 첫 질문을 뽑아드릴게요." },
+    ];
+    kicker.textContent = "QUESTION ROULETTE";
+    title.textContent = "채팅형 질문 룰렛";
     content.innerHTML = `
-      <div class="dice" id="diceValue">-</div>
-      <div class="modal-result" id="diceMission">주사위를 굴려 미션을 뽑으세요.</div>
+      <div class="chat-log" id="questionChat"></div>
+      <label class="chat-input">
+        답변 또는 분위기
+        <input id="questionInput" placeholder="예: 처음 만난 사람끼리 어색함" autocomplete="off" />
+      </label>
       <div class="button-row">
-        <button class="solid" id="rollDice">굴리기</button>
-        <button class="ghost" id="closeDice">닫기</button>
+        <button class="solid" id="nextQuestion">다음 질문</button>
+        <button class="ghost" id="saveQuestionChat">저장</button>
       </div>
     `;
-    $("#rollDice").addEventListener("click", rollDice);
-    $("#closeDice").addEventListener("click", closeModal);
+    renderQuestionChat();
+    $("#nextQuestion").addEventListener("click", nextQuestion);
+    $("#saveQuestionChat").addEventListener("click", () => saveGameSession("question_roulette", { messages: state.questionMessages }));
     return;
   }
 
@@ -503,28 +524,46 @@ function renderModal(type) {
   }
 }
 
-function spinRoulette() {
-  const topic = $("#rouletteTopic");
-  topic.classList.add("spinning");
-  topic.textContent = "뽑는 중...";
-  setTimeout(() => {
-    topic.textContent = pick(topics);
-    topic.classList.remove("spinning");
-  }, 520);
+async function drawAiCard(type) {
+  const result = $("#aiResult");
+  result.classList.add("spinning");
+  result.textContent = "열어보는 중...";
+  let text;
+  try {
+    text = await callSignalAi(type, [{ role: "user", content: type === "love" ? "오늘의 연애운을 짧고 재밌게 봐줘." : "오늘의 포춘쿠키 한 줄을 줘." }]);
+  } catch {
+    text = fallbackAi(type);
+  }
+  result.textContent = text;
+  result.classList.remove("spinning");
+  await saveGameSession(type === "love" ? "love_fortune" : "fortune_cookie", { text, source: "ai_or_fallback" });
 }
 
-function rollDice() {
-  let ticks = 0;
-  const timer = setInterval(() => {
-    const value = Math.floor(Math.random() * 6) + 1;
-    $("#diceValue").textContent = value;
-    $("#diceMission").textContent = missions[value - 1];
-    ticks += 1;
-    if (ticks > 10) {
-      clearInterval(timer);
-      saveGameSession("dice_mission", { dice: Number($("#diceValue").textContent), mission: $("#diceMission").textContent });
-    }
-  }, 75);
+function renderQuestionChat() {
+  const chat = $("#questionChat");
+  chat.innerHTML = state.questionMessages
+    .map((message) => `<div class="chat-bubble ${message.role}">${escapeHtml(message.content)}</div>`)
+    .join("");
+  chat.scrollTop = chat.scrollHeight;
+}
+
+async function nextQuestion() {
+  const input = $("#questionInput");
+  const userText = input.value.trim();
+  if (userText) state.questionMessages.push({ role: "user", content: userText });
+  input.value = "";
+  state.questionMessages.push({ role: "assistant", content: "생각 중..." });
+  renderQuestionChat();
+
+  let answer;
+  try {
+    answer = await callSignalAi("questions", state.questionMessages.filter((message) => message.content !== "생각 중..."));
+  } catch {
+    answer = fallbackAi("questions");
+  }
+  state.questionMessages[state.questionMessages.length - 1] = { role: "assistant", content: answer };
+  renderQuestionChat();
+  await saveGameSession("question_roulette", { messages: state.questionMessages, source: "ai_or_fallback" });
 }
 
 function subscribeRealtime() {

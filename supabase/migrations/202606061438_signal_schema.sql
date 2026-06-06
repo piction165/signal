@@ -68,7 +68,10 @@ create table if not exists public.game_sessions (
   game_type text not null check (
     game_type in (
       'topic_roulette',
+      'question_roulette',
       'dice_mission',
+      'love_fortune',
+      'fortune_cookie',
       'ladder_game',
       'random_pairing',
       'ai_icebreaker',
@@ -79,6 +82,21 @@ create table if not exists public.game_sessions (
   input_data jsonb not null default '{}',
   result_data jsonb not null default '{}',
   created_at timestamptz not null default now()
+);
+
+alter table public.game_sessions drop constraint if exists game_sessions_game_type_check;
+alter table public.game_sessions add constraint game_sessions_game_type_check check (
+  game_type in (
+    'topic_roulette',
+    'question_roulette',
+    'dice_mission',
+    'love_fortune',
+    'fortune_cookie',
+    'ladder_game',
+    'random_pairing',
+    'ai_icebreaker',
+    'game_invite'
+  )
 );
 
 create table if not exists public.game_invites (

@@ -446,7 +446,7 @@ input:focus {
   bottom: 0;
   left: 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   width: min(100%, 480px);
   margin: 0 auto;
   padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
@@ -565,6 +565,42 @@ input:focus {
 .pair-card p {
   margin-top: 8px;
   color: var(--muted);
+}
+
+.chat-log {
+  display: grid;
+  max-height: 260px;
+  overflow: auto;
+  gap: 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+  padding: 12px;
+}
+
+.chat-bubble {
+  width: fit-content;
+  max-width: 86%;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.38;
+}
+
+.chat-bubble.assistant {
+  background: white;
+  color: var(--text);
+}
+
+.chat-bubble.user {
+  justify-self: end;
+  background: var(--ink);
+  color: white;
+}
+
+.chat-input {
+  gap: 8px;
 }
 
 .spinning {
