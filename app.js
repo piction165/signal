@@ -6,7 +6,7 @@ const tarotCards = [
   { name: "THE SIGNAL MAGICIAN", image: "./assets/tarot/card-5.png", reading: "말재주보다 타이밍이 중요한 카드입니다. 이미 신호는 충분합니다. 망설이다가 흐름을 놓치기 전에, 지금 바로 한 문장만 건네보세요." },
 ];
 
-const AI_ENDPOINT = "https://iwravorcdoswhssmnzue.supabase.co/functions/v1/signal-ai";
+const AI_ENDPOINT = "https://isfrmnswcltmafnptmru.supabase.co/functions/v1/signal-ai";
 
 const flirtLines = [
   "오늘 여기 조명보다 방금 웃은 게 더 기억에 남는데요.",
@@ -34,98 +34,82 @@ const balanceSeeds = [
   {
     name: "장원영",
     group: "IVE",
-    image: "./assets/idols/wonyoung.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/wonyoung.webp",
   },
   {
     name: "안유진",
     group: "IVE",
-    image: "./assets/idols/yujin.jpg",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/yujin.webp",
   },
   {
     name: "리즈",
     group: "IVE",
-    image: "./assets/idols/liz.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/liz.webp",
   },
   {
     name: "카리나",
     group: "aespa",
-    image: "./assets/idols/karina.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/karina.webp",
   },
   {
     name: "윈터",
     group: "aespa",
-    image: "./assets/idols/winter.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/winter.webp",
   },
   {
     name: "닝닝",
     group: "aespa",
-    image: "./assets/idols/ningning.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/ningning.webp",
   },
   {
     name: "제니",
     group: "BLACKPINK",
-    image: "./assets/idols/jennie.jpg",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/jennie.webp",
   },
   {
     name: "로제",
     group: "BLACKPINK",
-    image: "./assets/idols/rose.jpg",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/rose.webp",
   },
   {
     name: "리사",
     group: "BLACKPINK",
-    image: "./assets/idols/lisa.jpg",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/lisa.webp",
   },
   {
     name: "김채원",
     group: "LE SSERAFIM",
-    image: "./assets/idols/chaewon.jpg",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/chaewon.webp",
   },
   {
     name: "사쿠라",
     group: "LE SSERAFIM",
-    image: "./assets/idols/sakura.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/sakura.webp",
   },
   {
     name: "허윤진",
     group: "LE SSERAFIM",
-    image: "./assets/idols/yunjin.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/yunjin.webp",
   },
   {
     name: "원희",
     group: "ILLIT",
-    image: "./assets/idols/illit.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/wonhee.webp",
   },
   {
     name: "민주",
     group: "ILLIT",
-    image: "./assets/idols/illit.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/minju.webp",
   },
   {
     name: "설윤",
     group: "NMIXX",
-    image: "./assets/idols/nmixx.png",
-    source: "Wikimedia Commons",
+    image: "./assets/profiles/sullyoon.webp",
   },
   {
     name: "마스다 아야노",
     group: "CUTIE STREET",
-    image: "./assets/idols/ayano.webp",
-    source: "KpopVisage",
+    image: "./assets/profiles/ayano.webp",
   },
 ];
 
@@ -257,10 +241,10 @@ function chooseTarot(index) {
 
 function renderFlirt() {
   setStage(
-    "FLIRTING LINE",
-    "플러팅 멘트",
+    "AI FLIRTING LINE",
+    "AI 플러팅 멘트",
     "",
-    `<button class="primary" id="drawButton">뽑기</button>`
+    `<button class="primary" id="drawButton">AI로 생성</button>`
   );
 }
 
@@ -275,9 +259,9 @@ function renderRoulette() {
 
 async function openFlirtResult() {
   const fallback = drawFromBag("flirt", flirtLines);
-  openResultModal("FLIRTING LINE", "생성 중...", "");
+  openResultModal("AI FLIRTING LINE", "생성 중...", "");
   currentText = await generateAiText("flirt", fallback);
-  openResultModal("FLIRTING LINE", currentText, "");
+  openResultModal("AI FLIRTING LINE", currentText, "");
 }
 
 async function openRouletteResult() {
@@ -349,7 +333,6 @@ function imageCard(person) {
   return `
     <figure class="idol-photo">
       <img src="${person.image}" alt="${person.name} 실제 사진" loading="lazy" decoding="async" />
-      <figcaption>${person.source}</figcaption>
     </figure>
   `;
 }

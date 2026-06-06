@@ -278,29 +278,8 @@ p {
   aspect-ratio: 3 / 4;
 }
 
-.idol-photo figcaption {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  max-width: calc(100% - 12px);
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.56);
-  color: white;
-  padding: 4px 7px;
-  font-size: 9px;
-  font-weight: 900;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .idol-photo img {
   background: var(--soft);
-}
-
-.idol-photo img[src*="illit"],
-.idol-photo img[src*="nmixx"] {
-  object-position: center top;
 }
 
 .choice-card span {
