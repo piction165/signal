@@ -169,6 +169,74 @@ p {
   padding: 0 14px;
 }
 
+.actions:has(.tarot-card) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tarot-card {
+  min-height: 190px;
+  padding: 8px;
+  background: var(--ink);
+  color: white;
+  transform: translateY(0);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.tarot-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.18);
+}
+
+.tarot-back,
+.tarot-face {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 170px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 6px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16) 25%, transparent 25%) 0 0 / 18px 18px,
+    linear-gradient(315deg, rgba(255, 255, 255, 0.12) 25%, transparent 25%) 0 0 / 18px 18px,
+    var(--ink);
+  text-align: center;
+}
+
+.tarot-back small,
+.tarot-back em,
+.tarot-face small,
+.tarot-face span {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.tarot-back strong {
+  font-size: clamp(44px, 7vw, 82px);
+  line-height: 1;
+}
+
+.tarot-result {
+  grid-column: 1 / -1;
+  display: grid;
+  place-items: center;
+}
+
+.tarot-face {
+  width: min(210px, 42vw);
+  min-height: 230px;
+  padding: 14px;
+  color: white;
+}
+
+.tarot-face strong {
+  max-width: 9ch;
+  font-size: clamp(24px, 4vw, 42px);
+  line-height: 1.05;
+}
+
 .choice {
   min-height: 96px;
   padding: 12px;
@@ -290,6 +358,19 @@ p {
 
   .actions button {
     min-height: 42px;
+  }
+
+  .tarot-card {
+    min-height: 114px;
+  }
+
+  .tarot-back {
+    min-height: 96px;
+  }
+
+  .tarot-face {
+    min-height: 128px;
+    width: min(160px, 34vw);
   }
 
   #qrImage {

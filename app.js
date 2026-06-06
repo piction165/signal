@@ -1,10 +1,12 @@
 const tarotCards = [
-  ["THE FOOL", "오늘은 먼저 말 거는 쪽이 이깁니다. 이상해도 시작하면 운이 따라옵니다."],
-  ["THE LOVERS", "서로 취향 하나만 맞아도 대화가 길어집니다. 좋아하는 걸 하나 물어보세요."],
-  ["THE STAR", "칭찬운이 좋습니다. 관찰한 걸 짧게 말하면 분위기가 풀립니다."],
-  ["THE MAGICIAN", "말재주보다 타이밍입니다. 눈 마주치면 바로 한마디."],
-  ["WHEEL", "우연처럼 보이는 질문이 오늘의 연결이 됩니다."],
-  ["SUN", "가볍고 밝은 말이 잘 먹힙니다. 복잡하게 가지 마세요."],
+  { name: "THE FOOL", symbol: "0", reading: "오늘은 먼저 말 거는 쪽이 이깁니다. 이상해도 시작하면 운이 따라옵니다." },
+  { name: "THE LOVERS", symbol: "VI", reading: "서로 취향 하나만 맞아도 대화가 길어집니다. 좋아하는 걸 하나 물어보세요." },
+  { name: "THE STAR", symbol: "XVII", reading: "칭찬운이 좋습니다. 관찰한 걸 짧게 말하면 분위기가 풀립니다." },
+  { name: "THE MAGICIAN", symbol: "I", reading: "말재주보다 타이밍입니다. 눈 마주치면 바로 한마디." },
+  { name: "WHEEL", symbol: "X", reading: "우연처럼 보이는 질문이 오늘의 연결이 됩니다." },
+  { name: "THE SUN", symbol: "XIX", reading: "가볍고 밝은 말이 잘 먹힙니다. 복잡하게 가지 마세요." },
+  { name: "THE MOON", symbol: "XVIII", reading: "상대의 진짜 마음보다 지금 분위기를 먼저 보세요. 천천히 열면 됩니다." },
+  { name: "TEMPERANCE", symbol: "XIV", reading: "밀고 당기기보다 리듬이 중요합니다. 질문 하나, 리액션 하나면 충분합니다." },
 ];
 
 const flirtLines = [
@@ -54,6 +56,7 @@ let bracket = [];
 let nextRound = [];
 let matchIndex = 0;
 let roundSize = 16;
+let tarotChoices = [];
 const drawBags = {
   tarot: [],
   flirt: [],
@@ -87,13 +90,47 @@ function setStage(kicker, title, body, actionsHtml) {
 }
 
 function renderTarot() {
-  const [card, text] = drawFromBag("tarot", tarotCards);
-  currentText = `${card}: ${text}`;
+  tarotChoices = [drawFromBag("tarot", tarotCards), drawFromBag("tarot", tarotCards), drawFromBag("tarot", tarotCards)];
+  currentText = "오늘의 타로 카드 3장 중 한 장을 고르세요.";
   setStage(
     "LOVE TAROT",
-    card,
-    text,
-    `<button class="primary" id="drawButton">다시 뽑기</button><button id="copyButton">복사</button>`
+    "오늘의 카드 3장",
+    "끌리는 카드를 하나 고르면 오늘의 연애운을 봐드립니다.",
+    tarotChoices
+      .map(
+        (_, index) => `
+          <button class="tarot-card" data-tarot-index="${index}" aria-label="${index + 1}번 타로 카드 선택">
+            <span class="tarot-back">
+              <small>SIGNAL</small>
+              <strong>${index + 1}</strong>
+              <em>LOVE TAROT</em>
+            </span>
+          </button>
+        `
+      )
+      .join("")
+  );
+}
+
+function chooseTarot(index) {
+  const card = tarotChoices[index];
+  if (!card) return;
+  currentText = `${card.name}: ${card.reading}`;
+  setStage(
+    "TODAY'S TAROT",
+    card.name,
+    card.reading,
+    `
+      <div class="tarot-result">
+        <div class="tarot-face">
+          <small>${card.symbol}</small>
+          <strong>${card.name}</strong>
+          <span>LOVE</span>
+        </div>
+      </div>
+      <button class="primary" id="drawButton">다시 3장 뽑기</button>
+      <button id="copyButton">복사</button>
+    `
   );
 }
 
@@ -216,6 +253,8 @@ document.addEventListener("click", (event) => {
   }
   if (event.target.id === "copyButton") copyCurrent();
   if (event.target.dataset.choice) chooseBalance(event.target.dataset.choice);
+  const tarotButton = event.target.closest("[data-tarot-index]");
+  if (tarotButton) chooseTarot(Number(tarotButton.dataset.tarotIndex));
 });
 
 $("#shareTop").addEventListener("click", shareApp);
