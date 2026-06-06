@@ -54,15 +54,23 @@ let bracket = [];
 let nextRound = [];
 let matchIndex = 0;
 let roundSize = 16;
+const drawBags = {
+  tarot: [],
+  flirt: [],
+  roulette: [],
+};
 
 const $ = (selector) => document.querySelector(selector);
 
-function pick(list) {
-  return list[Math.floor(Math.random() * list.length)];
-}
-
 function shuffle(list) {
   return [...list].sort(() => Math.random() - 0.5);
+}
+
+function drawFromBag(name, list) {
+  if (!drawBags[name].length) {
+    drawBags[name] = shuffle(list);
+  }
+  return drawBags[name].pop();
 }
 
 function toast(text) {
@@ -79,7 +87,7 @@ function setStage(kicker, title, body, actionsHtml) {
 }
 
 function renderTarot() {
-  const [card, text] = pick(tarotCards);
+  const [card, text] = drawFromBag("tarot", tarotCards);
   currentText = `${card}: ${text}`;
   setStage(
     "LOVE TAROT",
@@ -90,7 +98,7 @@ function renderTarot() {
 }
 
 function renderFlirt() {
-  currentText = pick(flirtLines);
+  currentText = drawFromBag("flirt", flirtLines);
   setStage(
     "FLIRTING LINE",
     currentText,
@@ -100,7 +108,7 @@ function renderFlirt() {
 }
 
 function renderRoulette() {
-  currentText = pick(rouletteQuestions);
+  currentText = drawFromBag("roulette", rouletteQuestions);
   setStage(
     "QUESTION ROULETTE",
     currentText,
