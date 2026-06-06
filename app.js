@@ -34,22 +34,22 @@ const rouletteQuestions = [
 ];
 
 const balanceSeeds = [
-  "장원영",
-  "카리나",
-  "안유진",
-  "윈터",
-  "제니",
-  "아이유",
-  "수지",
-  "한소희",
-  "차은우",
-  "정국",
-  "뷔",
-  "박보검",
-  "손석구",
-  "덱스",
-  "변우석",
-  "공유",
+  "장원영 · IVE",
+  "안유진 · IVE",
+  "리즈 · IVE",
+  "레이 · IVE",
+  "카리나 · aespa",
+  "윈터 · aespa",
+  "닝닝 · aespa",
+  "제니 · BLACKPINK",
+  "로제 · BLACKPINK",
+  "리사 · BLACKPINK",
+  "김채원 · LE SSERAFIM",
+  "사쿠라 · LE SSERAFIM",
+  "허윤진 · LE SSERAFIM",
+  "원희 · ILLIT",
+  "민주 · ILLIT",
+  "설윤 · NMIXX",
 ];
 
 let mode = "roulette";
