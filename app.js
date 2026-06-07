@@ -208,11 +208,13 @@ async function generateAiText(kind, fallbackText) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ kind, fallback: fallbackText }),
     });
-    if (!response.ok) throw new Error("AI unavailable");
     const data = await response.json();
-    return data.text || fallbackText;
+    if (!response.ok || !data.text) {
+      throw new Error(data.error || "AI unavailable");
+    }
+    return data.text;
   } catch {
-    return fallbackText;
+    return null;
   }
 }
 
@@ -277,6 +279,11 @@ async function openFlirtResult() {
   const fallback = drawFromBag("flirt", flirtLines);
   openResultModal("AI FLIRTING LINE", "생성 중...", "");
   currentText = await generateAiText("flirt", fallback);
+  if (!currentText) {
+    currentText = fallback;
+    openResultModal("AI FLIRTING LINE", "AI 생성 실패", "OpenAI 키 설정이 필요합니다. 임시 문구를 다시 뽑을 수 있어요.");
+    return;
+  }
   openResultModal("AI FLIRTING LINE", currentText, "");
 }
 
@@ -284,6 +291,11 @@ async function openRouletteResult() {
   const fallback = drawFromBag("roulette", rouletteQuestions);
   openResultModal("QUESTION ROULETTE", "생성 중...", "");
   currentText = await generateAiText("roulette", fallback);
+  if (!currentText) {
+    currentText = fallback;
+    openResultModal("QUESTION ROULETTE", "AI 생성 실패", "OpenAI 키 설정이 필요합니다. 임시 질문을 다시 뽑을 수 있어요.");
+    return;
+  }
   openResultModal("QUESTION ROULETTE", currentText, "");
 }
 
