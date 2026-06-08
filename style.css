@@ -379,8 +379,24 @@ figure {
 }
 
 .winner-image {
+  position: relative;
   display: grid;
+  gap: 10px;
   place-items: center;
+}
+
+.winner-rank {
+  display: inline-grid;
+  min-height: 34px;
+  place-items: center;
+  padding: 7px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffd166 0%, #ff9f0a 100%);
+  color: #111827;
+  font-size: 16px;
+  font-weight: 1000;
+  box-shadow: 0 14px 26px rgba(255, 159, 10, 0.28);
 }
 
 .winner-image .idol-photo {
@@ -507,6 +523,37 @@ figure {
   animation: confetti-fall 1.55s cubic-bezier(0.15, 0.75, 0.35, 1) var(--delay) both;
 }
 
+.fireworks {
+  position: fixed;
+  inset: 0;
+  z-index: 13;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fireworks i {
+  position: absolute;
+  top: var(--top);
+  left: var(--left);
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  color: var(--color);
+  background: currentColor;
+  box-shadow:
+    0 -34px 0 -4px currentColor,
+    24px -24px 0 -4px currentColor,
+    34px 0 0 -4px currentColor,
+    24px 24px 0 -4px currentColor,
+    0 34px 0 -4px currentColor,
+    -24px 24px 0 -4px currentColor,
+    -34px 0 0 -4px currentColor,
+    -24px -24px 0 -4px currentColor;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.24) rotate(0deg);
+  animation: firework-pop 1.25s cubic-bezier(0.12, 0.78, 0.24, 1) var(--delay) both;
+}
+
 @keyframes confetti-fall {
   0% {
     opacity: 0;
@@ -520,6 +567,30 @@ figure {
   100% {
     opacity: 0;
     transform: translate3d(var(--drift), 105vh, 0) rotate(var(--rotate)) scale(1);
+  }
+}
+
+@keyframes firework-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.18) rotate(0deg);
+    filter: blur(0);
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  68% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1.15) rotate(24deg);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.45) rotate(38deg);
+    filter: blur(2px);
   }
 }
 
@@ -545,7 +616,9 @@ figure {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shuffle-deck .tarot-card {
+  .shuffle-deck .tarot-card,
+  .confetti i,
+  .fireworks i {
     animation: none;
   }
 }

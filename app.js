@@ -187,14 +187,30 @@ function openResultModal(kicker, title, body, extraHtml = "", options = {}) {
 function confettiHtml() {
   return `
     <div class="confetti" aria-hidden="true">
-      ${Array.from({ length: 44 }, (_, index) => {
+      ${Array.from({ length: 72 }, (_, index) => {
         const left = 5 + Math.random() * 90;
         const drift = -120 + Math.random() * 240;
         const rotate = Math.random() * 720;
-        const delay = Math.random() * 0.35;
+        const delay = Math.random() * 0.5;
         const color = ["#ff4fb8", "#7c5cff", "#38d9ff", "#ffd166", "#ffffff"][index % 5];
         return `<i style="--left:${left}%;--drift:${drift}px;--rotate:${rotate}deg;--delay:${delay}s;--color:${color}"></i>`;
       }).join("")}
+    </div>
+  `;
+}
+
+function fireworksHtml() {
+  return `
+    <div class="fireworks" aria-hidden="true">
+      ${[
+        ["18%", "24%", "#ffd166", "0s"],
+        ["50%", "18%", "#38d9ff", "0.12s"],
+        ["78%", "28%", "#ff4fb8", "0.24s"],
+        ["28%", "58%", "#7c5cff", "0.36s"],
+        ["68%", "62%", "#34c759", "0.48s"],
+      ]
+        .map(([left, top, color, delay]) => `<i style="--left:${left};--top:${top};--color:${color};--delay:${delay};"></i>`)
+        .join("")}
     </div>
   `;
 }
@@ -349,10 +365,17 @@ function renderBalanceMatch() {
       ""
     );
     openResultModal(
-      "BALANCE WINNER",
-      winner.name,
-      winner.group,
-      `${confettiHtml()}<div class="winner-image">${imageCard(winner)}</div>`
+      "BALANCE 1등",
+      `1등은 ${winner.name}`,
+      `${winner.group} · 최종 선택`,
+      `
+        ${confettiHtml()}
+        ${fireworksHtml()}
+        <div class="winner-image">
+          <span class="winner-rank">1등</span>
+          ${imageCard(winner)}
+        </div>
+      `
     );
     return;
   }
