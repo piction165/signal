@@ -567,8 +567,8 @@ figure {
   }
 
   .modal {
-    align-items: end;
-    padding: 10px 10px max(10px, env(safe-area-inset-bottom));
+    place-items: center;
+    padding: max(14px, env(safe-area-inset-top)) 10px max(14px, env(safe-area-inset-bottom));
   }
 
   .modal-panel {
