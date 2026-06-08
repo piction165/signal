@@ -167,11 +167,7 @@ function toast(text) {
 }
 
 function setStage(kicker, title, body, actionsHtml) {
-  $("#stageKicker").textContent = kicker;
-  $("#stageTitle").textContent = title;
-  $("#stageBody").textContent = body || "";
-  $("#stageBody").hidden = !body;
-  $("#stageActions").innerHTML = actionsHtml;
+  currentText = title || body || currentText;
 }
 
 function openResultModal(kicker, title, body, extraHtml = "") {
@@ -475,9 +471,3 @@ $("#resultModal").addEventListener("click", (event) => {
 });
 
 renderQr();
-setStage(
-  "SIGNAL STUDIO",
-  "오늘의 신호를 가볍게 열어보기",
-  "메뉴를 누르면 타로, 밸런스 16강, 플러팅 멘트, 질문 룰렛이 모달로 바로 열립니다.",
-  ""
-);
