@@ -124,8 +124,8 @@ const balanceSeeds = [
   {
     name: "마스다 아야노",
     group: "CUTIE STREET",
-    image: "./assets/profile-cards/ayano.jpg",
-    focus: "50% 18%",
+    image: "./assets/profile-cards/ayano-official-20260608.jpg",
+    focus: "50% 16%",
   },
 ];
 
