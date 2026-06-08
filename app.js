@@ -100,8 +100,8 @@ const balanceSeeds = [
   {
     name: "허윤진",
     group: "LE SSERAFIM",
-    image: "./assets/profile-cards/yunjin-official-20260608.jpg",
-    focus: "50% 18%",
+    image: "./assets/profile-cards/yunjin-clear-20260608.jpg",
+    focus: "50% 20%",
   },
   {
     name: "원희",
