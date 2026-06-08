@@ -178,6 +178,7 @@ function openResultModal(kicker, title, body, extraHtml = "") {
   $("#modalKicker").textContent = kicker;
   $("#modalTitle").textContent = title;
   $("#modalBody").textContent = body || "";
+  $("#modalBody").hidden = !body;
   $("#modalExtra").innerHTML = extraHtml;
   $("#resultModal").hidden = false;
 }
@@ -223,19 +224,29 @@ function renderTarot() {
   currentText = "오늘의 타로 카드 5장 중 한 장을 고르세요.";
   setStage(
     "LOVE TAROT",
+    "카드 한 장으로 오늘의 흐름 보기",
+    "다섯 장 중 끌리는 카드를 고르면 결과가 모달에 열립니다.",
+    ""
+  );
+  openResultModal(
+    "LOVE TAROT",
     "오늘의 카드 5장",
-    "",
-    tarotChoices
-      .map(
-        (_, index) => `
-          <button class="tarot-card" data-tarot-index="${index}" aria-label="${index + 1}번 타로 카드 선택">
-            <span class="tarot-back">
-              <img src="${tarotImage(null, "back", index + 1)}" alt="${index + 1}번 타로 카드" />
-            </span>
-          </button>
-        `
-      )
-      .join("")
+    "끌리는 카드를 한 장 선택하세요.",
+    `
+      <div class="tarot-grid">
+        ${tarotChoices
+          .map(
+            (_, index) => `
+              <button class="tarot-card" data-tarot-index="${index}" aria-label="${index + 1}번 타로 카드 선택">
+                <span class="tarot-back">
+                  <img src="${tarotImage(null, "back", index + 1)}" alt="${index + 1}번 타로 카드" />
+                </span>
+              </button>
+            `
+          )
+          .join("")}
+      </div>
+    `
   );
 }
 
@@ -260,19 +271,21 @@ function chooseTarot(index) {
 function renderFlirt() {
   setStage(
     "AI FLIRTING LINE",
-    "AI 플러팅 멘트",
-    "",
-    `<button class="primary" id="drawButton">AI로 생성</button>`
+    "부담 없는 첫 문장 만들기",
+    "메뉴를 누르면 AI 플러팅 멘트가 모달로 생성됩니다.",
+    ""
   );
+  openFlirtResult();
 }
 
 function renderRoulette() {
   setStage(
     "QUESTION ROULETTE",
-    "질문 룰렛",
-    "",
-    `<button class="primary" id="drawButton">뽑기</button>`
+    "대화를 여는 질문 하나",
+    "메뉴를 누르면 질문 룰렛 결과가 모달로 생성됩니다.",
+    ""
   );
+  openRouletteResult();
 }
 
 async function openFlirtResult() {
@@ -313,9 +326,9 @@ function renderBalanceMatch() {
     currentText = `${winner.name} · ${winner.group}`;
     setStage(
       "BALANCE WINNER",
-      winner.name,
-      "",
-      `<button class="primary" id="drawButton">다시 16강</button><button id="copyButton">복사</button>`
+      "밸런스 16강 우승",
+      `${winner.name} · ${winner.group}`,
+      ""
     );
     openResultModal(
       "BALANCE WINNER",
@@ -340,19 +353,27 @@ function renderBalanceMatch() {
   currentText = `${left.name} vs ${right.name}`;
   setStage(
     `BALANCE ${currentRound} ${progress}`,
+    "밸런스 16강 진행 중",
+    `${currentRound} ${progress} 매치가 모달에 표시됩니다.`,
+    ""
+  );
+  openResultModal(
+    `BALANCE ${currentRound} ${progress}`,
     "둘 중 더 끌리는 쪽은?",
     "",
     `
-      <button class="choice choice-card" data-choice-index="0">
-        ${imageCard(left)}
-        <span>${left.group}</span>
-        <strong>${left.name}</strong>
-      </button>
-      <button class="choice choice-card" data-choice-index="1">
-        ${imageCard(right)}
-        <span>${right.group}</span>
-        <strong>${right.name}</strong>
-      </button>
+      <div class="choice-grid">
+        <button class="choice choice-card" data-choice-index="0">
+          ${imageCard(left)}
+          <span>${left.group}</span>
+          <strong>${left.name}</strong>
+        </button>
+        <button class="choice choice-card" data-choice-index="1">
+          ${imageCard(right)}
+          <span>${right.group}</span>
+          <strong>${right.name}</strong>
+        </button>
+      </div>
     `
   );
 }
@@ -454,4 +475,9 @@ $("#resultModal").addEventListener("click", (event) => {
 });
 
 renderQr();
-setMode("roulette");
+setStage(
+  "SIGNAL STUDIO",
+  "오늘의 신호를 가볍게 열어보기",
+  "메뉴를 누르면 타로, 밸런스 16강, 플러팅 멘트, 질문 룰렛이 모달로 바로 열립니다.",
+  ""
+);

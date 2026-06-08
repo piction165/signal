@@ -1,49 +1,71 @@
 :root {
   color-scheme: light;
-  --bg: #f4f4f2;
-  --paper: #ffffff;
-  --ink: #111111;
-  --muted: #666666;
-  --line: #d9d9d4;
-  --soft: #ececea;
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
-  font-family: Inter, Pretendard, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  --bg: #f5f7fb;
+  --bg-deep: #eef2f8;
+  --paper: rgba(255, 255, 255, 0.82);
+  --paper-solid: #ffffff;
+  --ink: #15171a;
+  --muted: #6e7783;
+  --line: rgba(30, 41, 59, 0.11);
+  --soft: #f0f3f8;
+  --accent: #007aff;
+  --accent-2: #34c759;
+  --shadow-soft: 0 16px 42px rgba(31, 41, 55, 0.11);
+  --shadow-card: 0 10px 28px rgba(31, 41, 55, 0.12), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  --shadow-modal: 0 34px 90px rgba(15, 23, 42, 0.28);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", Pretendard, "Segoe UI", sans-serif;
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
+html {
+  min-height: 100%;
   background: var(--bg);
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background:
+    radial-gradient(circle at 20% -10%, rgba(0, 122, 255, 0.18), transparent 30%),
+    radial-gradient(circle at 92% 8%, rgba(52, 199, 89, 0.14), transparent 28%),
+    linear-gradient(180deg, #fbfcff 0%, var(--bg) 48%, var(--bg-deep) 100%);
   color: var(--ink);
 }
 
 button {
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--paper);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
   color: var(--ink);
   font: inherit;
-  font-weight: 900;
+  font-weight: 800;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease, border-color 150ms ease;
+}
+
+button:active {
+  transform: scale(0.985);
 }
 
 h1,
 h2,
-p {
+p,
+figure {
   margin: 0;
 }
 
 .app {
   display: grid;
-  grid-template-columns: 1.05fr 1.4fr 0.75fr;
+  grid-template-columns: minmax(220px, 0.88fr) minmax(340px, 1.25fr) minmax(210px, 0.72fr);
   grid-template-rows: auto 1fr;
-  gap: 12px;
-  width: 100vw;
-  min-height: 100vh;
-  padding: 12px;
+  gap: 14px;
+  width: 100%;
+  min-height: 100dvh;
+  padding: 14px;
 }
 
 .top {
@@ -51,7 +73,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 44px;
+  min-height: 46px;
 }
 
 .top p,
@@ -62,97 +84,134 @@ p {
   letter-spacing: 0;
 }
 
-.top button {
-  min-width: 72px;
+.top p {
+  color: #2d333b;
+}
+
+.top button,
+.share-box button {
+  min-width: 74px;
   min-height: 38px;
+  padding: 0 14px;
+  box-shadow: 0 8px 20px rgba(31, 41, 55, 0.08);
 }
 
 .hero,
 .grid,
 .stage,
 .share-box {
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: 24px;
   background: var(--paper);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(24px) saturate(1.18);
+  -webkit-backdrop-filter: blur(24px) saturate(1.18);
 }
 
 .hero {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 96px;
-  padding: 14px;
+  justify-content: flex-end;
+  min-height: 132px;
+  padding: 20px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(244, 248, 255, 0.74)),
+    radial-gradient(circle at 20% 18%, rgba(0, 122, 255, 0.2), transparent 32%);
 }
 
 .hero h1 {
   max-width: 7ch;
-  font-size: clamp(30px, 5vw, 52px);
-  line-height: 0.98;
+  font-size: clamp(42px, 5vw, 70px);
+  line-height: 0.96;
   letter-spacing: 0;
-}
-
-.hero p {
-  max-width: 30ch;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.45;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  padding: 8px;
+  gap: 10px;
+  padding: 10px;
 }
 
 .tile {
+  position: relative;
   display: flex;
-  min-height: 120px;
+  min-height: 132px;
   flex-direction: column;
   justify-content: space-between;
-  padding: 14px;
+  overflow: hidden;
+  padding: 16px;
   text-align: left;
+  box-shadow: 0 8px 22px rgba(31, 41, 55, 0.07);
+}
+
+.tile::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, rgba(0, 122, 255, 0.16), rgba(52, 199, 89, 0.12));
+}
+
+.tile:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 122, 255, 0.25);
+  box-shadow: var(--shadow-soft);
 }
 
 .tile.active,
 .primary,
 .choice:hover {
-  background: var(--ink);
+  border-color: rgba(0, 122, 255, 0.34);
+  background: linear-gradient(180deg, #0a84ff 0%, #0071e3 100%);
   color: white;
+  box-shadow: 0 14px 28px rgba(0, 122, 255, 0.26);
 }
 
 .tile span {
+  position: relative;
+  z-index: 1;
   color: var(--muted);
   font-size: 12px;
   font-weight: 900;
 }
 
 .tile.active span {
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .tile strong {
-  font-size: 20px;
-  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+  max-width: 7ch;
+  font-size: 22px;
+  line-height: 1.14;
 }
 
 .stage {
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: 0;
-  padding: 22px;
+  padding: 28px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(247, 250, 255, 0.68)),
+    radial-gradient(circle at 88% 18%, rgba(0, 122, 255, 0.17), transparent 35%);
 }
 
 .stage h2 {
   align-self: center;
-  font-size: clamp(32px, 6vw, 72px);
-  line-height: 1.04;
+  max-width: 11ch;
+  font-size: clamp(42px, 6vw, 76px);
+  line-height: 1.02;
   letter-spacing: 0;
 }
 
 .stage p:not(.kicker) {
-  max-width: 54ch;
+  align-self: end;
+  max-width: 31ch;
   color: var(--muted);
   font-size: 16px;
   line-height: 1.45;
@@ -161,8 +220,12 @@ p {
 .actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 16px;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.actions:empty {
+  display: none;
 }
 
 .actions button {
@@ -174,22 +237,26 @@ p {
   grid-column: 1 / -1;
 }
 
-.actions:has(.tarot-card) {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+.tarot-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(70px, 1fr));
+  gap: 10px;
+  margin-top: 2px;
 }
 
 .tarot-card {
   min-height: 188px;
+  overflow: hidden;
   padding: 5px;
-  background: var(--ink);
+  background: #111827;
   color: white;
   transform: translateY(0);
-  transition: transform 140ms ease, box-shadow 140ms ease;
+  box-shadow: 0 16px 28px rgba(17, 24, 39, 0.18);
 }
 
 .tarot-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.18);
+  transform: translateY(-5px);
+  box-shadow: 0 22px 40px rgba(17, 24, 39, 0.24);
 }
 
 .tarot-back,
@@ -199,10 +266,10 @@ p {
   height: 100%;
   min-height: 176px;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.46);
-  border-radius: 6px;
   overflow: hidden;
-  background: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 11px;
+  background: #111827;
   text-align: center;
 }
 
@@ -215,39 +282,17 @@ p {
   object-fit: cover;
 }
 
-.tarot-back small,
-.tarot-back em,
-.tarot-face small,
-.tarot-face span {
-  color: rgba(255, 255, 255, 0.68);
-  font-size: 11px;
-  font-style: normal;
-  font-weight: 900;
-}
-
-.tarot-back strong {
-  font-size: clamp(44px, 7vw, 82px);
-  line-height: 1;
-}
-
 .tarot-result {
-  grid-column: 1 / -1;
   display: grid;
   place-items: center;
 }
 
 .tarot-face {
-  width: min(210px, 42vw);
-  min-height: 292px;
-  padding: 0;
+  width: min(230px, 58vw);
+  min-height: 0;
+  aspect-ratio: 2 / 3;
   color: white;
-  background: var(--ink);
-}
-
-.tarot-face strong {
-  max-width: 9ch;
-  font-size: clamp(24px, 4vw, 42px);
-  line-height: 1.05;
+  background: #111827;
 }
 
 .choice {
@@ -257,29 +302,31 @@ p {
   line-height: 1.18;
 }
 
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .choice-card {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto auto;
-  gap: 8px;
-  min-height: 238px;
+  gap: 9px;
+  min-height: 288px;
   overflow: hidden;
-  padding: 10px;
+  padding: 11px;
   text-align: left;
 }
 
 .idol-photo {
   position: relative;
   min-height: 0;
-  margin: 0;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 16px;
   background: var(--soft);
   aspect-ratio: 4 / 5;
-}
-
-.idol-photo img {
-  background: var(--soft);
+  box-shadow: 0 8px 18px rgba(31, 41, 55, 0.1);
 }
 
 .choice-card span {
@@ -289,12 +336,12 @@ p {
 }
 
 .choice-card strong {
-  font-size: clamp(22px, 3vw, 36px);
+  font-size: clamp(24px, 3vw, 38px);
   line-height: 1.05;
 }
 
 .choice-card:hover span {
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .winner-image {
@@ -302,24 +349,20 @@ p {
   place-items: center;
 }
 
-.winner-image img {
-  width: min(230px, 48vw);
-}
-
 .winner-image .idol-photo {
-  width: min(230px, 48vw);
+  width: min(260px, 62vw);
 }
 
 .share-box {
   display: grid;
   align-content: space-between;
-  gap: 10px;
-  padding: 14px;
+  gap: 12px;
+  padding: 18px;
 }
 
 .share-box h2 {
-  margin-top: 5px;
-  font-size: 22px;
+  margin-top: 6px;
+  font-size: 24px;
   line-height: 1.15;
 }
 
@@ -328,25 +371,24 @@ p {
   aspect-ratio: 1;
   justify-self: center;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 18px;
   background: white;
-}
-
-.share-box button {
-  min-height: 46px;
+  box-shadow: 0 10px 24px rgba(31, 41, 55, 0.1);
 }
 
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 16px;
+  bottom: 18px;
+  z-index: 20;
   display: none;
   transform: translateX(-50%);
-  border-radius: 8px;
-  background: var(--ink);
+  border-radius: 999px;
+  background: rgba(21, 23, 26, 0.92);
   color: white;
-  padding: 11px 14px;
+  padding: 11px 16px;
   font-weight: 900;
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.22);
 }
 
 .toast.show {
@@ -360,7 +402,9 @@ p {
   display: grid;
   place-items: center;
   padding: 18px;
-  background: rgba(0, 0, 0, 0.48);
+  background: rgba(17, 24, 39, 0.28);
+  backdrop-filter: blur(18px) saturate(1.12);
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
 }
 
 .modal[hidden] {
@@ -369,31 +413,23 @@ p {
 
 .modal-panel {
   display: grid;
-  width: min(620px, 92vw);
-  max-height: 88vh;
+  width: min(680px, 92vw);
+  max-height: 88dvh;
   gap: 14px;
   overflow: auto;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--paper);
-  padding: 22px;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
-}
-
-.modal-panel .tarot-result {
-  margin-top: 2px;
-}
-
-.modal-panel .tarot-face {
-  width: min(210px, 46vw);
-  min-height: 0;
-  aspect-ratio: 2 / 3;
-  max-height: 40vh;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 24px;
+  box-shadow: var(--shadow-modal);
+  backdrop-filter: blur(30px) saturate(1.2);
+  -webkit-backdrop-filter: blur(30px) saturate(1.2);
 }
 
 .modal-panel h2 {
-  font-size: clamp(34px, 7vw, 70px);
+  font-size: clamp(34px, 7vw, 68px);
   line-height: 1.02;
+  letter-spacing: 0;
 }
 
 .modal-panel p:not(.kicker) {
@@ -402,14 +438,19 @@ p {
   line-height: 1.45;
 }
 
+#modalExtra {
+  display: grid;
+  gap: 12px;
+}
+
 .modal-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 10px;
 }
 
 .modal-actions button {
-  min-height: 50px;
+  min-height: 52px;
 }
 
 .confetti {
@@ -426,7 +467,7 @@ p {
   left: var(--left);
   width: 8px;
   height: 16px;
-  border-radius: 2px;
+  border-radius: 3px;
   background: var(--color);
   box-shadow: 0 0 18px var(--color);
   animation: confetti-fall 1.55s cubic-bezier(0.15, 0.75, 0.35, 1) var(--delay) both;
@@ -437,63 +478,14 @@ p {
     opacity: 0;
     transform: translate3d(0, -20px, 0) rotate(0deg) scale(0.8);
   }
+
   12% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
     transform: translate3d(var(--drift), 105vh, 0) rotate(var(--rotate)) scale(1);
-  }
-}
-
-@media (orientation: portrait) {
-  .app {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto;
-    max-width: 520px;
-    min-height: 100vh;
-    margin: 0 auto;
-  }
-
-  .hero {
-    min-height: 118px;
-  }
-
-  .hero h1 {
-    max-width: 12ch;
-    font-size: 36px;
-  }
-
-  .stage {
-    min-height: 300px;
-  }
-
-  .stage h2 {
-    font-size: 34px;
-  }
-
-  .actions:has(.tarot-card) {
-    gap: 6px;
-  }
-
-  .tarot-card {
-    min-height: 142px;
-    padding: 4px;
-  }
-
-  .tarot-back {
-    min-height: 132px;
-  }
-
-  .tarot-face {
-    width: min(190px, 48vw);
-    min-height: 0;
-    aspect-ratio: 2 / 3;
-    max-height: 36vh;
-  }
-
-  .share-box {
-    display: none;
   }
 }
 
@@ -504,41 +496,44 @@ p {
     align-content: start;
     max-width: 430px;
     min-height: 100dvh;
-    gap: 8px;
+    gap: 10px;
     margin: 0 auto;
-    padding: 8px 8px max(8px, env(safe-area-inset-bottom));
+    padding: max(10px, env(safe-area-inset-top)) 10px max(12px, env(safe-area-inset-bottom));
   }
 
   .top {
-    min-height: 34px;
+    min-height: 36px;
   }
 
   .top button {
-    min-width: 58px;
-    min-height: 32px;
+    min-width: 62px;
+    min-height: 34px;
     font-size: 13px;
+    border-radius: 999px;
   }
 
   .hero {
-    min-height: 0;
-    height: 46px;
-    padding: 8px 11px;
+    min-height: 78px;
+    padding: 14px 16px;
+    border-radius: 22px;
   }
 
   .hero h1 {
     max-width: none;
-    font-size: 28px;
+    font-size: 35px;
     line-height: 1;
   }
 
   .grid {
-    gap: 6px;
-    padding: 6px;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 22px;
   }
 
   .tile {
-    min-height: 68px;
-    padding: 9px;
+    min-height: 94px;
+    border-radius: 18px;
+    padding: 12px;
   }
 
   .tile span {
@@ -547,70 +542,41 @@ p {
 
   .tile strong {
     font-size: 18px;
-    line-height: 1.08;
+    line-height: 1.09;
   }
 
   .stage {
-    min-height: 246px;
-    padding: 12px;
+    min-height: 208px;
+    border-radius: 22px;
+    padding: 18px;
   }
 
   .stage h2 {
-    font-size: 27px;
-    line-height: 1.08;
+    max-width: 10ch;
+    font-size: 34px;
+    line-height: 1.06;
   }
 
   .stage p:not(.kicker) {
+    max-width: 29ch;
     font-size: 14px;
   }
 
-  .actions:has(.tarot-card) {
-    grid-template-columns: repeat(5, minmax(54px, 1fr));
-    gap: 6px;
-  }
-
-  .actions button {
-    min-height: 46px;
-    padding: 0 10px;
-  }
-
-  .tarot-card {
-    min-height: 118px;
-    padding: 4px;
-  }
-
-  .tarot-back {
-    min-height: 108px;
-  }
-
-  .choice-card {
-    min-height: 174px;
-    gap: 6px;
-    padding: 8px;
-  }
-
-  .idol-photo {
-    aspect-ratio: 1 / 1;
-  }
-
-  .choice-card span {
-    font-size: 10px;
-  }
-
-  .choice-card strong {
-    font-size: 22px;
+  .share-box {
+    display: none;
   }
 
   .modal {
-    align-items: start;
-    padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+    align-items: end;
+    padding: 10px 10px max(10px, env(safe-area-inset-bottom));
   }
 
   .modal-panel {
-    width: min(430px, 95vw);
-    max-height: 88dvh;
-    gap: 10px;
-    padding: 13px;
+    width: min(430px, 100%);
+    max-height: 89dvh;
+    gap: 11px;
+    border-radius: 26px;
+    padding: 16px;
   }
 
   .modal-panel h2 {
@@ -620,16 +586,61 @@ p {
 
   .modal-panel p:not(.kicker) {
     font-size: 16px;
-    line-height: 1.36;
+    line-height: 1.38;
   }
 
-  .modal-panel .tarot-face {
-    width: min(142px, 38vw);
-    max-height: 30vh;
+  .tarot-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
   }
 
-  .share-box {
-    display: none;
+  .tarot-card {
+    min-height: 118px;
+    border-radius: 12px;
+    padding: 4px;
+  }
+
+  .tarot-back {
+    min-height: 108px;
+    border-radius: 9px;
+  }
+
+  .tarot-face {
+    width: min(162px, 46vw);
+    max-height: 32vh;
+  }
+
+  .choice-grid {
+    gap: 8px;
+  }
+
+  .choice-card {
+    min-height: 210px;
+    gap: 7px;
+    border-radius: 16px;
+    padding: 8px;
+  }
+
+  .idol-photo {
+    aspect-ratio: 4 / 5;
+    border-radius: 13px;
+  }
+
+  .choice-card span {
+    font-size: 10px;
+  }
+
+  .choice-card strong {
+    font-size: 21px;
+  }
+
+  .winner-image .idol-photo {
+    width: min(230px, 62vw);
+  }
+
+  .modal-actions button {
+    min-height: 48px;
+    border-radius: 14px;
   }
 }
 
@@ -639,23 +650,14 @@ p {
     padding: 8px;
   }
 
-  .top {
-    min-height: 34px;
-  }
-
   .hero,
   .stage,
   .share-box {
-    padding: 12px;
+    padding: 14px;
   }
 
   .hero h1 {
     font-size: 42px;
-  }
-
-  .hero p,
-  .stage p:not(.kicker) {
-    font-size: 13px;
   }
 
   .tile {
@@ -668,11 +670,7 @@ p {
   }
 
   .stage h2 {
-    font-size: clamp(28px, 5vw, 48px);
-  }
-
-  .actions button {
-    min-height: 42px;
+    font-size: clamp(30px, 5vw, 50px);
   }
 
   .tarot-card {
@@ -683,23 +681,10 @@ p {
     min-height: 116px;
   }
 
-  .tarot-face {
-    min-height: 128px;
-    width: min(160px, 34vw);
-  }
-
   .choice-card {
     min-height: 168px;
     gap: 5px;
     padding: 7px;
-  }
-
-  .choice-card span {
-    font-size: 10px;
-  }
-
-  .choice-card strong {
-    font-size: 18px;
   }
 
   #qrImage {
