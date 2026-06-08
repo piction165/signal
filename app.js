@@ -334,7 +334,7 @@ function startBalance() {
   nextRound = [];
   matchIndex = 0;
   roundSize = 16;
-  openBalanceRoundIntro();
+  renderBalanceMatch();
 }
 
 function balanceRoundLabel(size) {
