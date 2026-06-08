@@ -136,6 +136,7 @@ let nextRound = [];
 let matchIndex = 0;
 let roundSize = 16;
 let tarotChoices = [];
+let modalPrimaryAction = "retry";
 const drawBags = {
   tarot: [],
   flirt: [],
@@ -170,12 +171,16 @@ function setStage(kicker, title, body, actionsHtml) {
   currentText = title || body || currentText;
 }
 
-function openResultModal(kicker, title, body, extraHtml = "") {
+function openResultModal(kicker, title, body, extraHtml = "", options = {}) {
+  const { primaryLabel = "다시", primaryAction = "retry", closeLabel = "닫기" } = options;
+  modalPrimaryAction = primaryAction;
   $("#modalKicker").textContent = kicker;
   $("#modalTitle").textContent = title;
   $("#modalBody").textContent = body || "";
   $("#modalBody").hidden = !body;
   $("#modalExtra").innerHTML = extraHtml;
+  $("#modalRetry").textContent = primaryLabel;
+  $("#modalClose").textContent = closeLabel;
   $("#resultModal").hidden = false;
 }
 
@@ -313,7 +318,24 @@ function startBalance() {
   nextRound = [];
   matchIndex = 0;
   roundSize = 16;
-  renderBalanceMatch();
+  openBalanceRoundIntro();
+}
+
+function balanceRoundLabel(size) {
+  return size === 2 ? "결승" : `${size}강`;
+}
+
+function openBalanceRoundIntro() {
+  const label = balanceRoundLabel(roundSize);
+  const matchCount = Math.floor(bracket.length / 2);
+  currentText = `${label} 시작`;
+  openResultModal(
+    `BALANCE ${label}`,
+    `${label} 시작`,
+    label === "결승" ? "마지막 선택입니다. 준비되면 진행하세요." : `${matchCount}번 선택하면 다음 라운드로 넘어갑니다.`,
+    "",
+    { primaryLabel: "진행", primaryAction: "balance-round" }
+  );
 }
 
 function renderBalanceMatch() {
@@ -340,11 +362,17 @@ function renderBalanceMatch() {
     nextRound = [];
     matchIndex = 0;
     roundSize = bracket.length;
+    if (bracket.length === 1) {
+      renderBalanceMatch();
+      return;
+    }
+    openBalanceRoundIntro();
+    return;
   }
 
   const left = bracket[matchIndex];
   const right = bracket[matchIndex + 1];
-  const currentRound = roundSize === 2 ? "FINAL" : `${roundSize}강`;
+  const currentRound = balanceRoundLabel(roundSize);
   const progress = `${Math.floor(matchIndex / 2) + 1}/${Math.floor(bracket.length / 2)}`;
   currentText = `${left.name} vs ${right.name}`;
   setStage(
@@ -421,6 +449,16 @@ function retryCurrentMode() {
   if (mode === "roulette") openRouletteResult();
 }
 
+function handleModalPrimary() {
+  if (modalPrimaryAction === "balance-round") {
+    closeResultModal();
+    modalPrimaryAction = "retry";
+    renderBalanceMatch();
+    return;
+  }
+  retryCurrentMode();
+}
+
 async function shareApp() {
   const url = location.href.split("?")[0];
   if (navigator.share) {
@@ -465,7 +503,7 @@ document.addEventListener("click", (event) => {
 $("#shareTop").addEventListener("click", shareApp);
 $("#shareMain").addEventListener("click", shareApp);
 $("#modalClose").addEventListener("click", closeResultModal);
-$("#modalRetry").addEventListener("click", retryCurrentMode);
+$("#modalRetry").addEventListener("click", handleModalPrimary);
 $("#resultModal").addEventListener("click", (event) => {
   if (event.target.id === "resultModal") closeResultModal();
 });
