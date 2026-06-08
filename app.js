@@ -281,7 +281,7 @@ async function openFlirtResult() {
   currentText = await generateAiText("flirt", fallback);
   if (!currentText) {
     currentText = fallback;
-    openResultModal("AI FLIRTING LINE", "AI 생성 실패", "OpenAI 키 설정이 필요합니다. 임시 문구를 다시 뽑을 수 있어요.");
+    openResultModal("AI FLIRTING LINE", currentText, "");
     return;
   }
   openResultModal("AI FLIRTING LINE", currentText, "");
@@ -293,7 +293,7 @@ async function openRouletteResult() {
   currentText = await generateAiText("roulette", fallback);
   if (!currentText) {
     currentText = fallback;
-    openResultModal("QUESTION ROULETTE", "AI 생성 실패", "OpenAI 키 설정이 필요합니다. 임시 질문을 다시 뽑을 수 있어요.");
+    openResultModal("QUESTION ROULETTE", currentText, "");
     return;
   }
   openResultModal("QUESTION ROULETTE", currentText, "");
