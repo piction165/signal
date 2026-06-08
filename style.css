@@ -477,7 +477,8 @@ figure {
 }
 
 .modal-panel h2 {
-  font-size: clamp(34px, 7vw, 68px);
+  overflow-wrap: anywhere;
+  font-size: clamp(30px, 6vw, 62px);
   line-height: 1.02;
   letter-spacing: 0;
 }

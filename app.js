@@ -1,9 +1,16 @@
 const tarotCards = [
-  { name: "THE MOON", image: "./assets/tarot/rws-moon-20260608.jpg", reading: "오늘은 서두르기보다 분위기를 읽는 쪽이 유리합니다. 눈이 자주 마주치는 사람이 있다면 가볍게 웃고, 바로 깊은 질문보다 지금 공간에 대한 한마디로 시작해보세요." },
-  { name: "THE STAR", image: "./assets/tarot/rws-star-20260608.jpg", reading: "칭찬과 리액션 운이 좋습니다. 상대의 스타일, 말투, 선택한 게임 같은 구체적인 포인트를 짧게 말하면 대화가 부드럽게 열립니다." },
-  { name: "THE SUN", image: "./assets/tarot/rws-sun-20260608.jpg", reading: "밝고 장난스러운 에너지가 잘 맞는 카드입니다. 너무 멋있게 보이려 하기보다 지금 떠오른 가벼운 질문 하나를 던져보세요. 웃음이 먼저 오면 대화는 따라옵니다." },
-  { name: "WHEEL OF FORTUNE", image: "./assets/tarot/rws-wheel-20260608.jpg", reading: "오늘의 연결은 우연처럼 들어옵니다. 평소라면 지나칠 사람에게 한 번 더 시선을 두세요. 짧은 게임 초대나 질문 룰렛이 좋은 출발점이 됩니다." },
-  { name: "THE MAGICIAN", image: "./assets/tarot/rws-magician-20260608.jpg", reading: "말재주보다 타이밍이 중요한 카드입니다. 이미 신호는 충분합니다. 망설이다가 흐름을 놓치기 전에, 지금 바로 한 문장만 건네보세요." },
+  { name: "THE FOOL", koName: "바보", image: "./assets/tarot/rws-fool-20260608.jpg", reading: "새로운 대화가 열리는 카드입니다. 완벽한 첫마디보다 가벼운 질문 하나가 좋습니다. 즉흥적으로 웃을 수 있는 말을 건네보세요." },
+  { name: "THE MAGICIAN", koName: "마법사", image: "./assets/tarot/rws-magician-20260608.jpg", reading: "말재주보다 타이밍이 중요한 카드입니다. 이미 신호는 충분합니다. 망설이다가 흐름을 놓치기 전에, 지금 바로 한 문장만 건네보세요." },
+  { name: "THE EMPRESS", koName: "여제", image: "./assets/tarot/rws-empress-20260608.jpg", reading: "편안한 매력과 여유가 강한 카드입니다. 상대를 급하게 끌어당기기보다 자연스럽게 칭찬하고 리액션을 넉넉하게 보여주세요." },
+  { name: "THE LOVERS", koName: "연인", image: "./assets/tarot/rws-lovers-20260608.jpg", reading: "선택과 끌림이 선명해지는 카드입니다. 마음에 드는 사람이 있다면 돌려 말하기보다 짧고 솔직한 관심 표현이 잘 통합니다." },
+  { name: "THE CHARIOT", koName: "전차", image: "./assets/tarot/rws-chariot-20260608.jpg", reading: "먼저 움직일수록 유리합니다. 고민이 길어지면 흐름이 식을 수 있으니 게임 초대나 질문 룰렛처럼 바로 이어지는 행동을 선택하세요." },
+  { name: "STRENGTH", koName: "힘", image: "./assets/tarot/rws-strength-20260608.jpg", reading: "부드럽지만 자신감 있는 태도가 좋습니다. 세게 밀어붙이기보다 웃으면서 여유 있게 한 번 더 말을 걸어보세요." },
+  { name: "WHEEL OF FORTUNE", koName: "운명의 수레바퀴", image: "./assets/tarot/rws-wheel-20260608.jpg", reading: "오늘의 연결은 우연처럼 들어옵니다. 평소라면 지나칠 사람에게 한 번 더 시선을 두세요. 짧은 게임 초대나 질문 룰렛이 좋은 출발점이 됩니다." },
+  { name: "TEMPERANCE", koName: "절제", image: "./assets/tarot/rws-temperance-20260608.jpg", reading: "속도를 맞추는 감각이 중요합니다. 상대의 말투와 텐션을 먼저 보고, 부담 없는 리액션으로 대화를 부드럽게 이어가세요." },
+  { name: "THE STAR", koName: "별", image: "./assets/tarot/rws-star-20260608.jpg", reading: "칭찬과 리액션 운이 좋습니다. 상대의 스타일, 말투, 선택한 게임 같은 구체적인 포인트를 짧게 말하면 대화가 부드럽게 열립니다." },
+  { name: "THE MOON", koName: "달", image: "./assets/tarot/rws-moon-20260608.jpg", reading: "오늘은 서두르기보다 분위기를 읽는 쪽이 유리합니다. 눈이 자주 마주치는 사람이 있다면 가볍게 웃고, 바로 깊은 질문보다 지금 공간에 대한 한마디로 시작해보세요." },
+  { name: "THE SUN", koName: "태양", image: "./assets/tarot/rws-sun-20260608.jpg", reading: "밝고 장난스러운 에너지가 잘 맞는 카드입니다. 너무 멋있게 보이려 하기보다 지금 떠오른 가벼운 질문 하나를 던져보세요. 웃음이 먼저 오면 대화는 따라옵니다." },
+  { name: "THE WORLD", koName: "세계", image: "./assets/tarot/rws-world-20260608.jpg", reading: "마무리와 확신이 좋은 카드입니다. 이미 좋은 흐름이 있다면 대화를 흘려보내지 말고 다음 약속이나 다음 게임으로 이어보세요." },
 ];
 
 const AI_ENDPOINT = "https://isfrmnswcltmafnptmru.supabase.co/functions/v1/signal-ai";
@@ -161,6 +168,10 @@ function tarotImage(card, variant = "front", index = 1) {
   return card?.image || `./assets/tarot/card-${index}.png`;
 }
 
+function tarotTitle(card) {
+  return `${card.name} · ${card.koName}`;
+}
+
 function toast(text) {
   $("#toast").textContent = text;
   $("#toast").classList.add("show");
@@ -237,7 +248,7 @@ async function generateAiText(kind, fallbackText) {
 }
 
 function renderTarot() {
-  tarotChoices = Array.from({ length: 5 }, () => drawFromBag("tarot", tarotCards));
+  tarotChoices = shuffle(tarotCards).slice(0, 5);
   currentText = "오늘의 타로 카드 5장 중 한 장을 고르세요.";
   setStage(
     "LOVE TAROT",
@@ -270,15 +281,15 @@ function renderTarot() {
 function chooseTarot(index) {
   const card = tarotChoices[index];
   if (!card) return;
-  currentText = `${card.name}: ${card.reading}`;
+  currentText = `${tarotTitle(card)}: ${card.reading}`;
   openResultModal(
     "TODAY'S TAROT",
-    card.name,
+    tarotTitle(card),
     card.reading,
     `
       <div class="tarot-result">
         <div class="tarot-face">
-          <img src="${tarotImage(card, "front")}" alt="${card.name} 타로 카드" />
+          <img src="${tarotImage(card, "front")}" alt="${tarotTitle(card)} 타로 카드" />
         </div>
       </div>
     `
