@@ -88,8 +88,8 @@ const balanceSeeds = [
   {
     name: "김채원",
     group: "LE SSERAFIM",
-    image: "./assets/profile-cards/chaewon.jpg",
-    focus: "50% 22%",
+    image: "./assets/profile-cards/chaewon-clear-20260608.jpg",
+    focus: "50% 18%",
   },
   {
     name: "사쿠라",
