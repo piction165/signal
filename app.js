@@ -118,8 +118,8 @@ const balanceSeeds = [
   {
     name: "설윤",
     group: "NMIXX",
-    image: "./assets/profile-cards/sullyoon-official-20260608.jpg",
-    focus: "50% 18%",
+    image: "./assets/profile-cards/sullyoon-clear-20260608.jpg",
+    focus: "50% 20%",
   },
   {
     name: "마스다 아야노",
