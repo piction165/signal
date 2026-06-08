@@ -94,8 +94,8 @@ const balanceSeeds = [
   {
     name: "사쿠라",
     group: "LE SSERAFIM",
-    image: "./assets/profile-cards/sakura.jpg",
-    focus: "50% 22%",
+    image: "./assets/profile-cards/sakura-official-20260608.jpg",
+    focus: "50% 18%",
   },
   {
     name: "허윤진",
@@ -118,8 +118,8 @@ const balanceSeeds = [
   {
     name: "설윤",
     group: "NMIXX",
-    image: "./assets/profile-cards/sullyoon.jpg",
-    focus: "50% 22%",
+    image: "./assets/profile-cards/sullyoon-official-20260608.jpg",
+    focus: "50% 18%",
   },
   {
     name: "마스다 아야노",
