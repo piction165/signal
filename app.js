@@ -229,11 +229,11 @@ function renderTarot() {
     "오늘의 카드 5장",
     "끌리는 카드를 한 장 선택하세요.",
     `
-      <div class="tarot-grid">
+      <div class="tarot-grid shuffle-deck">
         ${tarotChoices
           .map(
             (_, index) => `
-              <button class="tarot-card" data-tarot-index="${index}" aria-label="${index + 1}번 타로 카드 선택">
+              <button class="tarot-card" data-tarot-index="${index}" aria-label="${index + 1}번 타로 카드 선택" style="--card-index:${index};">
                 <span class="tarot-back">
                   <img src="${tarotImage(null, "back", index + 1)}" alt="${index + 1}번 타로 카드" />
                 </span>
