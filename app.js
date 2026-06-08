@@ -1,9 +1,9 @@
 const tarotCards = [
-  { name: "THE MOON MIRROR", image: "./assets/tarot/card-1.png", reading: "오늘은 서두르기보다 분위기를 읽는 쪽이 유리합니다. 눈이 자주 마주치는 사람이 있다면 가볍게 웃고, 바로 깊은 질문보다 지금 공간에 대한 한마디로 시작해보세요." },
-  { name: "THE STAR HANDS", image: "./assets/tarot/card-2.png", reading: "칭찬과 리액션 운이 좋습니다. 상대의 스타일, 말투, 선택한 게임 같은 구체적인 포인트를 짧게 말하면 대화가 부드럽게 열립니다." },
-  { name: "THE DISCO SUN", image: "./assets/tarot/card-3.png", reading: "밝고 장난스러운 에너지가 잘 맞는 카드입니다. 너무 멋있게 보이려 하기보다 지금 떠오른 가벼운 질문 하나를 던져보세요. 웃음이 먼저 오면 대화는 따라옵니다." },
-  { name: "THE ORBIT WHEEL", image: "./assets/tarot/card-4.png", reading: "오늘의 연결은 우연처럼 들어옵니다. 평소라면 지나칠 사람에게 한 번 더 시선을 두세요. 짧은 게임 초대나 질문 룰렛이 좋은 출발점이 됩니다." },
-  { name: "THE SIGNAL MAGICIAN", image: "./assets/tarot/card-5.png", reading: "말재주보다 타이밍이 중요한 카드입니다. 이미 신호는 충분합니다. 망설이다가 흐름을 놓치기 전에, 지금 바로 한 문장만 건네보세요." },
+  { name: "THE MOON", image: "./assets/tarot/rws-moon-20260608.jpg", reading: "오늘은 서두르기보다 분위기를 읽는 쪽이 유리합니다. 눈이 자주 마주치는 사람이 있다면 가볍게 웃고, 바로 깊은 질문보다 지금 공간에 대한 한마디로 시작해보세요." },
+  { name: "THE STAR", image: "./assets/tarot/rws-star-20260608.jpg", reading: "칭찬과 리액션 운이 좋습니다. 상대의 스타일, 말투, 선택한 게임 같은 구체적인 포인트를 짧게 말하면 대화가 부드럽게 열립니다." },
+  { name: "THE SUN", image: "./assets/tarot/rws-sun-20260608.jpg", reading: "밝고 장난스러운 에너지가 잘 맞는 카드입니다. 너무 멋있게 보이려 하기보다 지금 떠오른 가벼운 질문 하나를 던져보세요. 웃음이 먼저 오면 대화는 따라옵니다." },
+  { name: "WHEEL OF FORTUNE", image: "./assets/tarot/rws-wheel-20260608.jpg", reading: "오늘의 연결은 우연처럼 들어옵니다. 평소라면 지나칠 사람에게 한 번 더 시선을 두세요. 짧은 게임 초대나 질문 룰렛이 좋은 출발점이 됩니다." },
+  { name: "THE MAGICIAN", image: "./assets/tarot/rws-magician-20260608.jpg", reading: "말재주보다 타이밍이 중요한 카드입니다. 이미 신호는 충분합니다. 망설이다가 흐름을 놓치기 전에, 지금 바로 한 문장만 건네보세요." },
 ];
 
 const AI_ENDPOINT = "https://isfrmnswcltmafnptmru.supabase.co/functions/v1/signal-ai";
