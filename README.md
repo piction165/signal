@@ -1,6 +1,6 @@
-# Signal
+# ICE BREAKING
 
-GitHub Pages only static web app for LOL event conversation games.
+GitHub Pages only static web app for event ice-breaking conversation games.
 
 ## Features
 

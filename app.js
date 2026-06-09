@@ -14,6 +14,7 @@ const tarotCards = [
 ];
 
 const AI_ENDPOINT = "https://isfrmnswcltmafnptmru.supabase.co/functions/v1/signal-ai";
+const APP_NAME = "ICE BREAKING";
 
 const flirtLines = [
   "오늘 여기 조명보다 방금 웃은 게 더 기억에 남는데요.",
@@ -497,7 +498,7 @@ async function shareApp() {
   const url = location.href.split("?")[0];
   if (navigator.share) {
     try {
-      await navigator.share({ title: "Signal", text: "LOL Signal", url });
+      await navigator.share({ title: APP_NAME, text: "ICE BREAKING", url });
       return;
     } catch {
       return;
